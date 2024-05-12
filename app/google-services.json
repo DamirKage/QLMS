@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "574345272400",
+    "project_id": "qlms-38fa4",
+    "storage_bucket": "qlms-38fa4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574345272400:android:e62c4eed199ee5b98c4555",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Uc0nl2pInuMg5teZ9QY3jVUczoeUOcM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

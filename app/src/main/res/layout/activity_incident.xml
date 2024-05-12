@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".IncidentActivity">
+
+    <TextView
+        android:id="@+id/incidentTypeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Опишите свое происшествия:"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textColor="@android:color/black"/>
+
+    <EditText
+        android:id="@+id/detailsEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/incidentTypeTextView"
+        android:hint="Details"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/addressEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detailsEditText"
+        android:hint="Address"
+        android:layout_marginTop="16dp"/>
+
+    <ImageView
+        android:id="@+id/photoImageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/addressEditText"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"/>
+
+    <Button
+        android:id="@+id/addPhotoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/photoImageView"
+        android:layout_centerHorizontal="true"
+        android:text="Add Photo"
+        android:layout_marginTop="16dp"/>
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addressEditText"
+        android:layout_centerHorizontal="true"
+        android:text="Сохранить"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/saveButton"
+        android:layout_centerHorizontal="true"
+        android:text="Назад"
+        android:layout_marginTop="16dp"/>
+
+
+</RelativeLayout>
