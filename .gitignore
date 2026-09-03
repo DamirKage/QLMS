@@ -1,0 +1,22 @@
+*.iml
+.gradle/
+/local.properties
+.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Android Studio
+*.hprof
+
+# Firebase secrets — never commit real config
+app/google-services.json
+serviceAccountKey.json
+*.keystore
+*.jks
+
+# Node (web admin panel tooling, if used)
+node_modules/

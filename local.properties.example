@@ -1,0 +1,13 @@
+# Copy this file to "local.properties" (already gitignored) and fill in real values.
+# local.properties is never committed — it is machine/developer specific.
+
+sdk.dir=/path/to/Android/Sdk
+
+# Google Maps SDK for Android key — https://console.cloud.google.com/google/maps-apis
+MAPS_API_KEY=YOUR_MAPS_API_KEY_HERE
+
+# Only needed when producing a signed release build:
+# RELEASE_KEYSTORE_PATH=/path/to/release.keystore
+# RELEASE_KEYSTORE_PASSWORD=changeit
+# RELEASE_KEY_ALIAS=qlms
+# RELEASE_KEY_PASSWORD=changeit

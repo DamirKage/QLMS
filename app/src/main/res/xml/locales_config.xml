@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kazakhstan is a trilingual state (Kazakh — state language, Russian — official
+     interethnic language, English — widely used in business/education), so the
+     app ships all three rather than defaulting to only one. -->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="kk" />
+    <locale android:name="ru" />
+    <locale android:name="en" />
+</locale-config>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QLMS</string>
+
+    <string name="onboarding_title_1">Help in one tap</string>
+    <string name="onboarding_body_1">Press the SOS button — the app finds your location and instantly alerts emergency services.</string>
+    <string name="onboarding_title_2">Medical info, always ready</string>
+    <string name="onboarding_body_2">Add your blood type, allergies, and emergency contacts in advance — shared only when you trigger SOS.</string>
+    <string name="onboarding_title_3">Safer together</string>
+    <string name="onboarding_body_3">Get alerts about incidents nearby and report suspicious situations to help keep your area safe.</string>
+    <string name="onboarding_get_started">Get started</string>
+    <string name="onboarding_next">Next</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_feed">Alerts</string>
+    <string name="nav_history">History</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_checkin">Safety check-in</string>
+
+    <string name="login_subtitle">Sign in to your safety app</string>
+    <string name="field_email">Email</string>
+    <string name="field_password">Password</string>
+    <string name="field_confirm_password">Confirm password</string>
+    <string name="field_full_name">Full name</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="login_action">Log in</string>
+    <string name="login_go_to_register">No account? Register</string>
+    <string name="error_fields_required">Fill in all fields</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="error_password_too_short">Password must be at least 6 characters</string>
+
+    <string name="register_title">Create account</string>
+    <string name="register_subtitle">Join the safety network</string>
+    <string name="register_consent_notice">By registering you consent to processing your personal data (per Kazakhstan\'s Law "On Personal Data").</string>
+    <string name="register_action">Register</string>
+    <string name="register_go_to_login">Already have an account? Log in</string>
+
+    <string name="forgot_password_title">Reset password</string>
+    <string name="forgot_password_subtitle">Enter your email and we\'ll send a reset link</string>
+    <string name="forgot_password_action">Send link</string>
+    <string name="forgot_password_sent">Reset link sent. Check your inbox.</string>
+    <string name="forgot_password_back_to_login">Back to login</string>
+
+    <string name="home_pending_sync_banner">%1$d reports syncing (offline)</string>
+    <string name="home_sos_active_banner">SOS active — help is on the way</string>
+    <string name="home_report_incident_action">Report an incident</string>
+    <string name="sos_pick_type_title">Select incident type</string>
+
+    <string name="sos_button_label">SOS</string>
+    <string name="sos_confirm_title">Calling for help</string>
+    <string name="sos_confirm_body">A "%1$s" report will be sent along with your location to emergency services.</string>
+    <string name="sos_confirm_cancel">Cancel</string>
+    <string name="sos_notification_title">SOS active</string>
+    <string name="sos_notification_locating">Finding your location…</string>
+    <string name="sos_notification_no_location">Location unavailable, sending anyway</string>
+    <string name="sos_notification_active">Sent to dispatch</string>
+    <string name="sos_notification_queued">Offline — will send once connected</string>
+    <string name="sos_notification_cancel_action">Cancel</string>
+    <string name="sos_sms_template">EMERGENCY! I need help. My location: %1$s</string>
+
+    <string name="report_title">Report an incident</string>
+    <string name="report_pick_type">Incident type</string>
+    <string name="report_description_label">Description</string>
+    <string name="report_address_label">Address (optional)</string>
+    <string name="report_photos_label">Photos</string>
+    <string name="report_add_photo">Add photo</string>
+    <string name="report_anonymous_toggle">Report anonymously</string>
+    <string name="report_submit_action">Submit</string>
+
+    <string name="feed_empty">No incidents nearby</string>
+    <string name="history_empty">You haven\'t submitted any reports yet</string>
+    <string name="incident_detail_title">Incident details</string>
+    <string name="incident_detail_description">Description</string>
+    <string name="incident_detail_address">Address</string>
+    <string name="incident_detail_coordinates">Coordinates</string>
+    <string name="incident_detail_cancel">Cancel report</string>
+    <string name="incident_detail_dispatcher_note">Dispatcher note</string>
+
+    <string name="status_new">New</string>
+    <string name="status_acknowledged">Acknowledged</string>
+    <string name="status_dispatched">Dispatched</string>
+    <string name="status_resolved">Resolved</string>
+    <string name="status_false_alarm">False alarm</string>
+    <string name="status_cancelled">Cancelled</string>
+
+    <string name="incident_type_crime">Crime</string>
+    <string name="incident_type_fire">Fire</string>
+    <string name="incident_type_medical">Medical emergency</string>
+    <string name="incident_type_road_accident">Road accident</string>
+    <string name="incident_type_domestic_violence">Domestic violence</string>
+    <string name="incident_type_missing_person">Missing person</string>
+    <string name="incident_type_natural_disaster">Natural disaster</string>
+    <string name="incident_type_gas_leak">Gas leak</string>
+    <string name="incident_type_other">Other</string>
+
+    <string name="profile_default_name">User</string>
+    <string name="profile_menu_medical">Medical information</string>
+    <string name="profile_menu_contacts">Emergency contacts</string>
+    <string name="profile_menu_settings">Settings</string>
+    <string name="profile_menu_sign_out">Sign out</string>
+
+    <string name="medical_title">Medical information</string>
+    <string name="medical_privacy_note">This is only ever shared when you trigger SOS, and stored encrypted on this device.</string>
+    <string name="medical_blood_type">Blood type</string>
+    <string name="medical_allergies">Allergies (comma-separated)</string>
+    <string name="medical_chronic_conditions">Chronic conditions (comma-separated)</string>
+    <string name="medical_medications">Current medications (comma-separated)</string>
+    <string name="medical_notes">Additional notes</string>
+    <string name="medical_organ_donor">Organ donor</string>
+    <string name="medical_saved_confirmation">Saved</string>
+
+    <string name="contacts_title">Emergency contacts</string>
+    <string name="contacts_add">Add contact</string>
+    <string name="contacts_empty">No contacts added yet</string>
+    <string name="contacts_relationship">Relationship</string>
+    <string name="contacts_phone">Phone number</string>
+
+    <string name="checkin_title">Safety check-in</string>
+    <string name="checkin_explanation">When enabled, if you don\'t confirm "I\'m safe" within the chosen window, your emergency contacts are notified automatically.</string>
+    <string name="checkin_enable">Enable</string>
+    <string name="checkin_interval_label">Check-in interval</string>
+    <string name="checkin_hours_format">%1$s h</string>
+    <string name="checkin_im_safe_action">I\'m safe</string>
+    <string name="checkin_sms_template">Safety check-in: the user hasn\'t responded. Last known location: %1$s</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_high_contrast">High-contrast text</string>
+    <string name="settings_section_language">Language</string>
+    <string name="settings_language_restart_note">Restart the app after changing language</string>
+    <string name="settings_section_safety">Safety</string>
+    <string name="settings_radius_label">Alert radius: %1$d km</string>
+    <string name="settings_silent_sos">Silent SOS (shake)</string>
+    <string name="settings_silent_sos_desc">Three hard shakes of the phone trigger SOS</string>
+    <string name="settings_section_privacy">Privacy</string>
+    <string name="settings_privacy_note">You can delete your account and all stored data (your right under Kazakhstan\'s "On Personal Data" law).</string>
+    <string name="settings_delete_account">Delete account</string>
+    <string name="settings_delete_confirm_title">Delete account?</string>
+    <string name="settings_delete_confirm_body">This cannot be undone. All your data, including medical information and contacts, will be deleted.</string>
+
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+
+    <string name="notification_channel_sos_name">SOS alerts</string>
+    <string name="notification_channel_sos_desc">Notifications about an active SOS</string>
+    <string name="notification_channel_alerts_name">Nearby incidents</string>
+    <string name="notification_channel_alerts_desc">Notifications about new incidents in your area</string>
+    <string name="notification_channel_checkin_name">Safety check-in</string>
+    <string name="notification_channel_checkin_desc">Safety check-in reminders</string>
+</resources>

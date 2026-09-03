@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QLMS Dispatch — Вход</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="configBanner" class="config-banner">
+    Firebase не настроен. Заполните <code>web/js/firebase-config.js</code> данными вашего проекта — см. docs/SETUP.md.
+  </div>
+
+  <div class="login-shell">
+    <div class="login-card">
+      <div class="login-logo">Q</div>
+      <h1>QLMS Dispatch</h1>
+      <p class="subtitle">Панель диспетчера — только для сотрудников экстренных служб</p>
+
+      <form id="loginForm">
+        <label for="email">Электронная почта</label>
+        <input id="email" type="email" required autocomplete="username" />
+
+        <label for="password">Пароль</label>
+        <input id="password" type="password" required autocomplete="current-password" />
+
+        <button class="primary" type="submit" id="submitBtn">Войти</button>
+        <div class="error-text" id="errorText"></div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>
