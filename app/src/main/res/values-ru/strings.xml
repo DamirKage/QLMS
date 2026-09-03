@@ -57,6 +57,7 @@
     <string name="sos_notification_queued">Нет сети — будет отправлено при подключении</string>
     <string name="sos_notification_cancel_action">Отменить</string>
     <string name="sos_sms_template">ЧРЕЗВЫЧАЙНАЯ СИТУАЦИЯ! Мне нужна помощь. Моё местоположение: %1$s</string>
+    <string name="sos_sms_tracking_suffix">Следите за статусом здесь: %1$s</string>
 
     <string name="report_title">Сообщить о происшествии</string>
     <string name="report_pick_type">Тип происшествия</string>
@@ -75,6 +76,10 @@
     <string name="incident_detail_coordinates">Координаты</string>
     <string name="incident_detail_cancel">Отменить сообщение</string>
     <string name="incident_detail_dispatcher_note">Заметка диспетчера</string>
+    <string name="incident_detail_chat_title">Связь с диспетчером</string>
+    <string name="incident_detail_chat_empty">Сообщений пока нет. Диспетчер напишет, когда подтвердит ситуацию.</string>
+    <string name="incident_detail_chat_hint">Напишите сообщение</string>
+    <string name="incident_detail_chat_send">Отправить</string>
 
     <string name="status_new">Новое</string>
     <string name="status_acknowledged">Принято</string>
@@ -146,10 +151,19 @@
     <string name="action_cancel">Отмена</string>
     <string name="action_delete">Удалить</string>
 
+    <string name="fake_call_default_name">Айгуль</string>
+    <string name="fake_call_incoming_label">Входящий вызов</string>
+    <string name="fake_call_decline">Отклонить</string>
+    <string name="fake_call_answer">Ответить</string>
+    <string name="home_fake_call_action">Фальшивый звонок</string>
+    <string name="home_fake_call_scheduled">Фальшивый звонок поступит через несколько секунд</string>
+
     <string name="notification_channel_sos_name">Сигналы SOS</string>
     <string name="notification_channel_sos_desc">Уведомления об активном SOS</string>
     <string name="notification_channel_alerts_name">Происшествия рядом</string>
     <string name="notification_channel_alerts_desc">Уведомления о новых происшествиях в вашем районе</string>
     <string name="notification_channel_checkin_name">Проверка безопасности</string>
     <string name="notification_channel_checkin_desc">Напоминания о проверке безопасности</string>
+    <string name="notification_channel_fake_call_name">Фальшивый звонок</string>
+    <string name="notification_channel_fake_call_desc">Запланированный фальшивый входящий звонок</string>
 </resources>

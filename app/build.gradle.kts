@@ -15,6 +15,11 @@ val localProperties = Properties().apply {
     if (file.exists()) file.inputStream().use { load(it) }
 }
 val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY", "")
+// Firebase Hosting domain (e.g. https://your-project.web.app) — set once you've
+// deployed web/track.html, so SOS SMS messages can include a live-tracking link
+// for emergency contacts who don't have the app installed. Left blank, the app
+// simply omits that link (see SosForegroundService.kt).
+val trackingBaseUrl: String = localProperties.getProperty("TRACKING_BASE_URL", "").trimEnd('/')
 
 android {
     namespace = "kz.qlms.app"
@@ -34,6 +39,7 @@ android {
 
         // Kazakhstan single emergency number (unified since 2021) — see Constants.kt
         buildConfigField("String", "EMERGENCY_NUMBER", "\"112\"")
+        buildConfigField("String", "TRACKING_BASE_URL", "\"$trackingBaseUrl\"")
     }
 
     signingConfigs {

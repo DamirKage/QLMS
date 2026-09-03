@@ -13,6 +13,11 @@ rules_version = '2';
 //                                          reporter and by dispatcher/admin
 //                                          accounts. Holds medicalSnapshot,
 //                                          contactsSnapshot, dispatcherNote.
+//   incidents/{id}/messages/{msgId}    -> live chat between the reporter and
+//                                          a dispatcher on that one incident;
+//                                          same reporter-or-dispatcher access
+//                                          as the private doc. Messages are
+//                                          append-only (no edit/delete).
 //
 // Medical info and emergency contacts are split into a private subdocument
 // on purpose: Firestore rules can only grant or deny a whole document, never
@@ -70,6 +75,15 @@ service cloud.firestore {
       match /private/dispatch {
         allow read: if isDispatcher() || isOwner(get(/databases/$(database)/documents/incidents/$(incidentId)).data.reporterId);
         allow write: if isDispatcher() || isOwner(get(/databases/$(database)/documents/incidents/$(incidentId)).data.reporterId);
+      }
+
+      match /messages/{messageId} {
+        function isParticipant() {
+          return isDispatcher() || isOwner(get(/databases/$(database)/documents/incidents/$(incidentId)).data.reporterId);
+        }
+        allow read: if isParticipant();
+        allow create: if isParticipant() && request.resource.data.senderId == request.auth.uid;
+        allow update, delete: if false;
       }
     }
   }

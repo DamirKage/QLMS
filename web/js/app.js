@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/fireba
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, collection, query, orderBy, limit,
-  onSnapshot, updateDoc, setDoc, serverTimestamp,
+  onSnapshot, updateDoc, setDoc, addDoc, serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
 
@@ -34,6 +34,8 @@ let incidents = [];
 let selectedId = null;
 let activeFilter = "ALL";
 let privateUnsub = null;
+let messagesUnsub = null;
+let currentUser = null;
 
 // ---------- Auth guard ----------
 onAuthStateChanged(auth, async (user) => {
@@ -48,6 +50,7 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = "login.html";
     return;
   }
+  currentUser = user;
   document.getElementById("userEmail").textContent = user.email ?? "";
   startDashboard();
 });
@@ -161,13 +164,48 @@ function selectIncident(id) {
   renderDetail(incident ?? null);
 
   if (privateUnsub) { privateUnsub(); privateUnsub = null; }
+  if (messagesUnsub) { messagesUnsub(); messagesUnsub = null; }
   if (id) {
     privateUnsub = onSnapshot(
       doc(db, "incidents", id, "private", "dispatch"),
       (snap) => renderPrivateSection(snap.exists() ? snap.data() : null),
       () => renderPrivateSection(null, true),
     );
+    const messagesQuery = query(collection(db, "incidents", id, "messages"), orderBy("sentAt", "asc"));
+    messagesUnsub = onSnapshot(messagesQuery, (snap) => {
+      renderMessages(snap.docs.map((d) => d.data()));
+    });
+
+    const sendBtn = document.getElementById("chatSendBtn");
+    const input = document.getElementById("chatInput");
+    const send = () => {
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+      addDoc(collection(db, "incidents", id, "messages"), {
+        senderId: currentUser.uid,
+        senderRole: "DISPATCHER",
+        text,
+        sentAt: serverTimestamp(),
+      });
+    };
+    sendBtn.addEventListener("click", send);
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") send(); });
   }
+}
+
+function renderMessages(messages) {
+  const container = document.getElementById("chatMessages");
+  if (!container) return;
+  if (messages.length === 0) {
+    container.innerHTML = '<div class="private-locked">Хабарлар әлі жоқ.</div>';
+    return;
+  }
+  container.innerHTML = messages.map((m) => {
+    const fromDispatcher = m.senderRole === "DISPATCHER";
+    return `<div class="chat-bubble ${fromDispatcher ? "mine" : "theirs"}">${escapeHtml(m.text)}</div>`;
+  }).join("");
+  container.scrollTop = container.scrollHeight;
 }
 
 function renderDetail(incident) {
@@ -192,6 +230,14 @@ function renderDetail(incident) {
     <div class="section" id="privateSection">
       <h3>Құпия деректер</h3>
       <div class="private-locked">Жүктелуде…</div>
+    </div>
+    <div class="section">
+      <h3>Диспетчермен байланыс</h3>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Хабарлама жазыңыз…" />
+        <button id="chatSendBtn">Жіберу</button>
+      </div>
     </div>
     <div class="section">
       <h3>Мәртебені өзгерту</h3>

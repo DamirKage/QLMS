@@ -11,13 +11,24 @@
  *   2. onIncidentUpdated — when a dispatcher (web panel) changes an incident's
  *      status, pushes a notification straight to the reporter.
  *
+ *   3. getPublicIncidentStatus — backs web/track.html, the no-login link sent
+ *      to emergency contacts by SMS. It deliberately does NOT give the page
+ *      direct Firestore access: a public page with `incidents` read access
+ *      (even via anonymous auth) could list/scrape every reporter's location
+ *      in the whole collection, not just the one incident the link is for.
+ *      This function is the only thing that can read Firestore here (Admin
+ *      SDK bypasses rules) and it returns a deliberately narrow field subset
+ *      for exactly one id — no reporter identity, no description text.
+ *
  * Deploy with: firebase deploy --only functions   (after `firebase init functions`
  * in this folder and filling in a real Firebase project).
  */
 
 const { onDocumentCreated, onDocumentUpdated } = require("firebase-functions/v2/firestore");
+const { onRequest } = require("firebase-functions/v2/https");
 const { initializeApp } = require("firebase-admin/app");
 const { getMessaging } = require("firebase-admin/messaging");
+const { getFirestore } = require("firebase-admin/firestore");
 
 initializeApp();
 
@@ -58,4 +69,27 @@ exports.onIncidentUpdated = onDocumentUpdated("incidents/{incidentId}", async (e
     },
     data: { incidentId: event.params.incidentId },
   });
+});
+
+const PUBLIC_FIELDS = ["type", "status", "latitude", "longitude", "isSosTriggered", "updatedAt", "createdAt"];
+
+exports.getPublicIncidentStatus = onRequest({ cors: true }, async (req, res) => {
+  const id = req.query.id;
+  if (!id || typeof id !== "string") {
+    res.status(400).json({ error: "missing id" });
+    return;
+  }
+
+  const snap = await getFirestore().collection("incidents").doc(id).get();
+  if (!snap.exists) {
+    res.status(404).json({ error: "not found" });
+    return;
+  }
+
+  const data = snap.data();
+  const publicView = {};
+  for (const field of PUBLIC_FIELDS) {
+    if (data[field] !== undefined) publicView[field] = data[field];
+  }
+  res.status(200).json(publicView);
 });

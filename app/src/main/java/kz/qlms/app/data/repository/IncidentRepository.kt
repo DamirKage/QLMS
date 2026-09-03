@@ -44,6 +44,8 @@ class IncidentRepository(
     private fun incidentsCollection() = firestore.collection(FirestoreSchema.INCIDENTS)
     private fun privateDoc(incidentId: String) =
         incidentsCollection().document(incidentId).collection("private").document("dispatch")
+    private fun messagesCollection(incidentId: String) =
+        incidentsCollection().document(incidentId).collection("messages")
 
     /**
      * Always queues locally first (Room), then a WorkManager job (see
@@ -156,6 +158,32 @@ class IncidentRepository(
         }
         awaitClose { registration.remove() }
     }
+
+    /**
+     * Live back-and-forth with whoever picks up the incident, standing in for
+     * a real voice call: the reporter sees "help is on the way" from a human
+     * within seconds, without this build depending on a telephony/WebRTC SDK
+     * that can't be compile-verified here (see docs/ARCHITECTURE.md).
+     */
+    fun observeMessages(incidentId: String): Flow<List<kz.qlms.app.data.model.IncidentMessage>> = callbackFlow {
+        val registration = messagesCollection(incidentId)
+            .orderBy("sentAt", Query.Direction.ASCENDING)
+            .addSnapshotListener { snapshot, _ ->
+                val messages = snapshot?.documents?.mapNotNull { doc ->
+                    doc.toObject(kz.qlms.app.data.model.IncidentMessage::class.java)?.copy(id = doc.id)
+                } ?: emptyList()
+                trySend(messages)
+            }
+        awaitClose { registration.remove() }
+    }
+
+    suspend fun sendMessage(incidentId: String, senderId: String, text: String): QlmsResult<Unit> = runCatching {
+        val message = kz.qlms.app.data.model.IncidentMessage(senderId = senderId, text = text)
+        messagesCollection(incidentId).document().set(message).await()
+    }.fold(
+        onSuccess = { QlmsResult.Success(Unit) },
+        onFailure = { QlmsResult.Error(it.message ?: "Could not send message", it) },
+    )
 
     suspend fun cancelIncident(incidentId: String): QlmsResult<Unit> = runCatching {
         incidentsCollection().document(incidentId)

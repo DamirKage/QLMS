@@ -89,6 +89,7 @@ Firestore *default* rules (which block everything).
 ```
 sdk.dir=/path/to/Android/Sdk
 MAPS_API_KEY=your_maps_key_here
+TRACKING_BASE_URL=https://your-project.web.app   # optional, see §7 and §8
 ```
 
 This file is gitignored — every developer/machine has their own.
@@ -123,7 +124,15 @@ firebase deploy --only functions
 ```
 
 This wires up "new incident near you" and "your report status changed" push
-notifications. Not required for the core SOS/report/dispatch flow to work.
+notifications, plus `getPublicIncidentStatus`, which backs the no-login
+live-tracking link (`web/track.html`) that can ride along in the SOS SMS to
+emergency contacts. That page deliberately never talks to Firestore directly
+— only this function can read it, and it returns a narrow field subset for
+one incident id at a time, so the link can't be used to browse anyone else's
+reports. After deploying, set `TRACKING_BASE_URL` in `local.properties` (§6)
+to your Hosting domain and rebuild the app for the link to start appearing
+in SOS messages. None of this is required for the core SOS/report/dispatch
+flow to work.
 
 ## 9. Testing the SOS flow end to end
 

@@ -53,5 +53,16 @@ class QlmsApplication : Application() {
                 description = getString(R.string.notification_channel_checkin_desc)
             },
         )
+
+        manager.createNotificationChannel(
+            NotificationChannel(
+                Constants.NOTIFICATION_CHANNEL_FAKE_CALL,
+                getString(R.string.notification_channel_fake_call_name),
+                NotificationManager.IMPORTANCE_HIGH,
+            ).apply {
+                description = getString(R.string.notification_channel_fake_call_desc)
+                setSound(null, null) // FakeCallActivity plays the ringtone itself, once the screen is up
+            },
+        )
     }
 }

@@ -6,6 +6,11 @@ sdk.dir=/path/to/Android/Sdk
 # Google Maps SDK for Android key — https://console.cloud.google.com/google/maps-apis
 MAPS_API_KEY=YOUR_MAPS_API_KEY_HERE
 
+# Optional: your deployed Firebase Hosting domain (web/), so SOS SMS messages
+# can include a no-login live-tracking link (web/track.html) for emergency
+# contacts who don't have the app. Leave blank to omit that link.
+TRACKING_BASE_URL=https://your-project.web.app
+
 # Only needed when producing a signed release build:
 # RELEASE_KEYSTORE_PATH=/path/to/release.keystore
 # RELEASE_KEYSTORE_PASSWORD=changeit

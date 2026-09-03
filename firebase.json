@@ -10,6 +10,7 @@
     "public": "web",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
+      { "source": "/api/incident-status", "function": "getPublicIncidentStatus" },
       { "source": "**", "destination": "/index.html" }
     ]
   },

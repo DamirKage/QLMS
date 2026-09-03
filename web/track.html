@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QLMS — Отслеживание</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    .track-shell { min-height: 100vh; display: flex; flex-direction: column; }
+    .track-header { padding: 16px 20px; background: #fff; border-bottom: 1px solid var(--qlms-border); }
+    .track-header .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; }
+    .track-header .brand .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--qlms-blue); }
+    .track-status { padding: 14px 20px; background: #fff; border-bottom: 1px solid var(--qlms-border); display: flex; align-items: center; gap: 12px; }
+    #trackMap { flex: 1; min-height: 320px; }
+    .track-footer { padding: 12px 20px; font-size: 12px; color: var(--qlms-text-muted); text-align: center; background: #fff; }
+    .track-state { padding: 60px 24px; text-align: center; color: var(--qlms-text-muted); }
+  </style>
+</head>
+<body>
+  <div class="track-shell">
+    <div class="track-header">
+      <div class="brand"><span class="dot"></span> QLMS — Live status</div>
+    </div>
+
+    <div id="trackStatusBar" class="track-status" hidden>
+      <span id="trackBadge" class="badge NEW">—</span>
+      <span id="trackLabel" style="font-size:14px; color:var(--qlms-text);"></span>
+    </div>
+
+    <div id="trackMap" hidden></div>
+
+    <div id="trackEmpty" class="track-state">Жүктелуде…</div>
+
+    <div class="track-footer">Бұл сілтеме тек осы оқиғаның орны мен мәртебесін көрсетеді — жеке деректер көрсетілмейді.</div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module" src="js/track.js"></script>
+</body>
+</html>

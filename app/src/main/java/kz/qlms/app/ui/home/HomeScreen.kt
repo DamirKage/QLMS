@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.Warning
@@ -24,6 +25,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,7 +50,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -60,6 +65,7 @@ import kotlinx.coroutines.launch
 import kz.qlms.app.R
 import kz.qlms.app.core.rememberAppContainer
 import kz.qlms.app.data.model.IncidentType
+import kz.qlms.app.service.FakeCallScheduler
 import kz.qlms.app.service.SosForegroundService
 import kz.qlms.app.ui.components.IncidentTypeGrid
 import kz.qlms.app.ui.sos.SosButton
@@ -99,6 +105,7 @@ fun HomeScreen(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) add(Manifest.permission.POST_NOTIFICATIONS)
         },
     )
+    val notificationPermission = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
 
     val userLocation by viewModel.userLocation.collectAsState()
     val nearbyIncidents by viewModel.nearbyIncidents.collectAsState()
@@ -107,6 +114,8 @@ fun HomeScreen(
 
     var showTypePicker by remember { mutableStateOf(false) }
     var pendingType by remember { mutableStateOf<IncidentType?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val fakeCallDefaultName = stringResource(R.string.fake_call_default_name)
 
     LaunchedEffect(locationPermissions.allPermissionsGranted) {
         if (locationPermissions.allPermissionsGranted) {
@@ -172,6 +181,24 @@ fun HomeScreen(
             Icon(Icons.Filled.CheckCircle, contentDescription = stringResource(R.string.nav_checkin))
         }
 
+        val fakeCallScheduledText = stringResource(R.string.home_fake_call_scheduled)
+        FloatingActionButton(
+            onClick = {
+                if (!notificationPermission.status.isGranted) {
+                    notificationPermission.launchPermissionRequest()
+                } else {
+                    FakeCallScheduler.schedule(context, callerName = fakeCallDefaultName)
+                    scope.launch { snackbarHostState.showSnackbar(fakeCallScheduledText) }
+                }
+            },
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp)
+                .padding(top = 48.dp),
+        ) {
+            Icon(Icons.Filled.Call, contentDescription = stringResource(R.string.home_fake_call_action))
+        }
+
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -195,6 +222,8 @@ fun HomeScreen(
                 )
             }
         }
+
+        SnackbarHost(hostState = snackbarHostState, modifier = Modifier.align(Alignment.BottomCenter))
     }
 
     if (showTypePicker) {

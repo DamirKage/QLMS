@@ -79,9 +79,11 @@ class SosForegroundService : Service() {
             contactsSnapshot = contacts,
         )
 
+        var syncedIncidentId: String? = null
         when (val result = repo.createIncidentDirectOrQueue(incident, privateDetails)) {
             is QlmsResult.Success -> {
                 incidentId = result.data
+                syncedIncidentId = result.data
                 _currentIncidentId.value = result.data
                 updateNotification(getString(R.string.sos_notification_active))
             }
@@ -91,7 +93,17 @@ class SosForegroundService : Service() {
 
         if (location != null && contacts.isNotEmpty()) {
             val link = LocationUtils.googleMapsLink(location.latitude, location.longitude)
-            val message = getString(R.string.sos_sms_template, link)
+            // Only include the live-tracking web link when the incident actually made it
+            // to Firestore (the function backing that page has nothing to serve for a
+            // still-queued offline report) and a hosting domain is configured.
+            val trackingLink = syncedIncidentId
+                ?.takeIf { kz.qlms.app.BuildConfig.TRACKING_BASE_URL.isNotBlank() }
+                ?.let { "${kz.qlms.app.BuildConfig.TRACKING_BASE_URL}/track.html?id=$it" }
+            val message = if (trackingLink != null) {
+                getString(R.string.sos_sms_template, link) + " " + getString(R.string.sos_sms_tracking_suffix, trackingLink)
+            } else {
+                getString(R.string.sos_sms_template, link)
+            }
             PhoneUtils.notifyContactsBySms(contacts, message)
         }
 

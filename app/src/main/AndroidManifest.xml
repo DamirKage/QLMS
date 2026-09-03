@@ -77,6 +77,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".service.FakeCallActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.QLMS" />
+
         <service
             android:name=".service.SosForegroundService"
             android:exported="false"

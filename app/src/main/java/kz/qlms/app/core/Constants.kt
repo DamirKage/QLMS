@@ -23,6 +23,9 @@ object Constants {
     const val NOTIFICATION_CHANNEL_SOS = "qlms_sos_channel"
     const val NOTIFICATION_CHANNEL_ALERTS = "qlms_alerts_channel"
     const val NOTIFICATION_CHANNEL_CHECKIN = "qlms_checkin_channel"
+    const val NOTIFICATION_CHANNEL_FAKE_CALL = "qlms_fake_call_channel"
+
+    const val FAKE_CALL_DEFAULT_DELAY_SECONDS = 8L
 
     const val DEEP_LINK_SCHEME = "qlms"
 

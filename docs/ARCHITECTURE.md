@@ -98,6 +98,40 @@ actual implementation are visible in its own text:
     a Material 3 theme, dark mode, and a consistent SOS-red used only for the
     emergency action so it keeps its meaning throughout the app.
 
+## Why SOS still dials 112 instead of only "our own server"
+
+A natural question: since the dispatcher panel already gets an SOS the moment
+it's created (a Firestore listener, not a phone call), why not route
+*everything* through it instead of also placing a real call? Because a
+private app server — however good its live map is — cannot itself dispatch
+police, an ambulance, or a fire crew; only Kazakhstan's 112 system can. Making
+SOS call "our own server" instead of 112 would look like an upgrade but would
+actually be a safety regression: a real emergency would depend on someone
+being logged into the dispatcher panel at that moment.
+
+What the dispatcher panel *is* good for — and what several real-world
+services (Noonlight, RapidSOS) do — is give a human a live picture of the
+situation without waiting on a phone call. Three features built on that idea:
+
+- **Live chat on the incident** (`incidents/{id}/messages`, reporter and
+  dispatcher/admin only) — the practical, reliably-buildable stand-in for a
+  voice call. A telephony/WebRTC integration would need a real third-party
+  account (Twilio/Agora/etc.) and native SDK wiring this environment has no
+  way to compile-test; the chat gets most of the same value ("someone
+  confirms they've seen this and help is coming") without that risk.
+- **No-login live-tracking link** (`web/track.html` + the
+  `getPublicIncidentStatus` Cloud Function) — the SOS SMS to emergency
+  contacts can include a link that shows only that one incident's live
+  location/status, for someone who doesn't have the app. It deliberately
+  never talks to Firestore directly from the browser — a public page with
+  direct `incidents` read access (even via anonymous auth) could be used to
+  scrape every reporter's location, not just the one the link is for; the
+  Cloud Function is the only thing that can read Firestore here and returns a
+  narrow field subset for exactly one id.
+- **Fake incoming call** (`FakeCallActivity`/`FakeCallWorker`) — a discreet
+  exit tool, not a dispatcher-facing feature, but the same "real-world safety
+  app" category (bSafe, Companion) the other two draw from.
+
 ## What's intentionally out of scope
 
 - **Silent SOS (shake) only runs while the app process is alive** (armed from

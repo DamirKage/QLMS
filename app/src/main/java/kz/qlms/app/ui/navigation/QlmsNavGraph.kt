@@ -1,11 +1,15 @@
 package kz.qlms.app.ui.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -44,8 +48,16 @@ fun QlmsNavGraph(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier,
-        enterTransition = { fadeIn(tween(180)) },
-        exitTransition = { fadeOut(tween(120)) },
+        enterTransition = {
+            if (isTabSwitch()) fadeIn(tween(160)) else slideInHorizontally(tween(220)) { it / 4 } + fadeIn(tween(220))
+        },
+        exitTransition = {
+            if (isTabSwitch()) fadeOut(tween(120)) else fadeOut(tween(140))
+        },
+        popEnterTransition = { fadeIn(tween(180)) },
+        popExitTransition = {
+            slideOutHorizontally(tween(220)) { it / 4 } + fadeOut(tween(220))
+        },
     ) {
         composable(Screen.Onboarding.route) {
             OnboardingScreen(onFinished = { navController.navigateAndClear(Screen.Login.route) })
@@ -125,4 +137,11 @@ private fun NavHostController.navigateAndClear(route: String) {
         popUpTo(0) { inclusive = true }
         launchSingleTop = true
     }
+}
+
+/** Peer tabs (Home/Feed/History/Profile) crossfade; everything else is a "push" and slides. */
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.isTabSwitch(): Boolean {
+    val fromRoute = initialState.destination.route
+    val toRoute = targetState.destination.route
+    return bottomNavScreens.any { it.route == fromRoute } && bottomNavScreens.any { it.route == toRoute }
 }

@@ -206,6 +206,30 @@ button.primary:disabled { opacity: 0.6; cursor: not-allowed; }
 .status-actions button:hover { border-color: var(--qlms-blue); color: var(--qlms-blue); }
 .status-actions button.danger:hover { border-color: var(--qlms-red); color: var(--qlms-red); }
 
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+.chat-bubble {
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.chat-bubble.mine { align-self: flex-end; background: var(--qlms-blue); color: white; }
+.chat-bubble.theirs { align-self: flex-start; background: var(--qlms-bg); color: var(--qlms-text); }
+.chat-input-row { display: flex; gap: 8px; margin-top: 8px; }
+.chat-input-row input { flex: 1; margin: 0; }
+.chat-input-row button {
+  border: none; background: var(--qlms-blue); color: white; border-radius: 8px;
+  padding: 0 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+
 .private-locked {
   background: #f7f9fc;
   border: 1px dashed var(--qlms-border);

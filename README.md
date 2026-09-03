@@ -35,6 +35,13 @@ before/after.
 - **Safety check-in** — arm a timer; if you don't confirm "I'm safe" in time,
   your emergency contacts are notified automatically.
 - **Silent SOS** — three hard shakes trigger SOS without touching the screen.
+- **Live chat with a dispatcher** during an active SOS — a reliable stand-in
+  for a voice call that doesn't depend on a telephony/WebRTC SDK.
+- **No-login live-tracking link** — the SOS SMS to emergency contacts can
+  include a link to a lightweight web page showing just that one incident's
+  live status and location, no account or app install needed.
+- **Discreet "fake call"** — a one-tap simulated incoming call (ringtone,
+  vibration, full lock-screen UI) to help exit an uncomfortable situation.
 - **Offline-first SOS/reports** — a report made with no signal is queued on
   the device and delivered the moment connectivity returns.
 - **Trilingual** — Kazakh, Russian, English (Kazakhstan is a trilingual state;

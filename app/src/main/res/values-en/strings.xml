@@ -57,6 +57,7 @@
     <string name="sos_notification_queued">Offline — will send once connected</string>
     <string name="sos_notification_cancel_action">Cancel</string>
     <string name="sos_sms_template">EMERGENCY! I need help. My location: %1$s</string>
+    <string name="sos_sms_tracking_suffix">Follow live status here: %1$s</string>
 
     <string name="report_title">Report an incident</string>
     <string name="report_pick_type">Incident type</string>
@@ -75,6 +76,10 @@
     <string name="incident_detail_coordinates">Coordinates</string>
     <string name="incident_detail_cancel">Cancel report</string>
     <string name="incident_detail_dispatcher_note">Dispatcher note</string>
+    <string name="incident_detail_chat_title">Chat with dispatcher</string>
+    <string name="incident_detail_chat_empty">No messages yet. The dispatcher will write once they confirm your situation.</string>
+    <string name="incident_detail_chat_hint">Write a message</string>
+    <string name="incident_detail_chat_send">Send</string>
 
     <string name="status_new">New</string>
     <string name="status_acknowledged">Acknowledged</string>
@@ -146,10 +151,19 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_delete">Delete</string>
 
+    <string name="fake_call_default_name">Aigul</string>
+    <string name="fake_call_incoming_label">Incoming call</string>
+    <string name="fake_call_decline">Decline</string>
+    <string name="fake_call_answer">Answer</string>
+    <string name="home_fake_call_action">Fake call</string>
+    <string name="home_fake_call_scheduled">Fake call arriving in a few seconds</string>
+
     <string name="notification_channel_sos_name">SOS alerts</string>
     <string name="notification_channel_sos_desc">Notifications about an active SOS</string>
     <string name="notification_channel_alerts_name">Nearby incidents</string>
     <string name="notification_channel_alerts_desc">Notifications about new incidents in your area</string>
     <string name="notification_channel_checkin_name">Safety check-in</string>
     <string name="notification_channel_checkin_desc">Safety check-in reminders</string>
+    <string name="notification_channel_fake_call_name">Fake call</string>
+    <string name="notification_channel_fake_call_desc">A scheduled fake incoming call</string>
 </resources>

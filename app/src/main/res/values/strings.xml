@@ -63,6 +63,7 @@
     <string name="sos_notification_queued">Интернет жоқ — байланыс орнатылған кезде жіберіледі</string>
     <string name="sos_notification_cancel_action">Болдырмау</string>
     <string name="sos_sms_template">ТӨТЕНШЕ ЖАҒДАЙ! Маған көмек қажет. Менің орналасқан жерім: %1$s</string>
+    <string name="sos_sms_tracking_suffix">Мәртебені осы жерден қадағалаңыз: %1$s</string>
 
     <!-- Report -->
     <string name="report_title">Оқиға туралы хабарлау</string>
@@ -83,6 +84,10 @@
     <string name="incident_detail_coordinates">Координаттар</string>
     <string name="incident_detail_cancel">Хабарламаны болдырмау</string>
     <string name="incident_detail_dispatcher_note">Диспетчер жазбасы</string>
+    <string name="incident_detail_chat_title">Диспетчермен байланыс</string>
+    <string name="incident_detail_chat_empty">Хабарлар әлі жоқ. Диспетчер жағдайды растағанда жазады.</string>
+    <string name="incident_detail_chat_hint">Хабарлама жазыңыз</string>
+    <string name="incident_detail_chat_send">Жіберу</string>
 
     <string name="status_new">Жаңа</string>
     <string name="status_acknowledged">Қабылданды</string>
@@ -160,6 +165,14 @@
     <string name="action_cancel">Болдырмау</string>
     <string name="action_delete">Жою</string>
 
+    <!-- Fake call -->
+    <string name="fake_call_default_name">Айгүл</string>
+    <string name="fake_call_incoming_label">Кіріс қоңырау</string>
+    <string name="fake_call_decline">Бас тарту</string>
+    <string name="fake_call_answer">Жауап беру</string>
+    <string name="home_fake_call_action">Жалған қоңырау</string>
+    <string name="home_fake_call_scheduled">Жалған қоңырау бірнеше секундтан кейін келеді</string>
+
     <!-- Notification channels -->
     <string name="notification_channel_sos_name">SOS дабылдары</string>
     <string name="notification_channel_sos_desc">Белсенді SOS туралы хабарламалар</string>
@@ -167,4 +180,6 @@
     <string name="notification_channel_alerts_desc">Аймағыңыздағы жаңа оқиғалар туралы хабарландырулар</string>
     <string name="notification_channel_checkin_name">Қауіпсіздік белгісі</string>
     <string name="notification_channel_checkin_desc">Қауіпсіздік белгісін еске салу</string>
+    <string name="notification_channel_fake_call_name">Жалған қоңырау</string>
+    <string name="notification_channel_fake_call_desc">Жоспарланған жалған кіріс қоңырау</string>
 </resources>
