@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="qlms_blue">#0B4DA6</color>
+    <color name="qlms_blue_dark">#00104D</color>
+    <color name="qlms_red">#E0301F</color>
+    <color name="qlms_white">#FFFFFF</color>
+    <color name="qlms_surface_light">#FDFCFF</color>
+    <color name="qlms_surface_dark">#1A1B1F</color>
+</resources>

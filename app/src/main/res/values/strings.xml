@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QLMS</string>
+    <string name="notification_channel_alerts_id" translatable="false">qlms_alerts_channel</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">Бір түртіп көмек шақыру</string>
+    <string name="onboarding_body_1">SOS түймесін басыңыз — қосымша орналасқан жеріңізді анықтап, жедел қызметтерге дереу хабарлайды.</string>
+    <string name="onboarding_title_2">Медициналық деректер қолда болады</string>
+    <string name="onboarding_body_2">Қан тобы, аллергия және шұғыл байланыстарды алдын ала қосыңыз — олар тек SOS кезінде ғана жіберіледі.</string>
+    <string name="onboarding_title_3">Қауымдастықпен бірге қауіпсіз</string>
+    <string name="onboarding_body_3">Аймағыңыздағы оқиғалар туралы хабарландырулар алыңыз және күдікті жағдайлар туралы хабарлаңыз.</string>
+    <string name="onboarding_get_started">Бастау</string>
+    <string name="onboarding_next">Келесі</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Басты</string>
+    <string name="nav_feed">Хабарландырулар</string>
+    <string name="nav_history">Тарих</string>
+    <string name="nav_profile">Профиль</string>
+    <string name="nav_checkin">Қауіпсіздік белгісі</string>
+
+    <!-- Auth -->
+    <string name="login_subtitle">Қауіпсіздік қолданбасына кіріңіз</string>
+    <string name="field_email">Электрондық пошта</string>
+    <string name="field_password">Құпия сөз</string>
+    <string name="field_confirm_password">Құпия сөзді растау</string>
+    <string name="field_full_name">Аты-жөні</string>
+    <string name="login_forgot_password">Құпия сөзді ұмыттыңыз ба?</string>
+    <string name="login_action">Кіру</string>
+    <string name="login_go_to_register">Тіркелгіңіз жоқ па? Тіркелу</string>
+    <string name="error_fields_required">Барлық өрістерді толтырыңыз</string>
+    <string name="error_password_mismatch">Құпия сөздер сәйкес келмейді</string>
+    <string name="error_password_too_short">Құпия сөз кемінде 6 таңбадан тұруы керек</string>
+
+    <string name="register_title">Тіркелу</string>
+    <string name="register_subtitle">Қауіпсіздік желісіне қосылыңыз</string>
+    <string name="register_consent_notice">Тіркелу арқылы сіз жеке деректеріңізді өңдеуге келісім бересіз (ҚР «Дербес деректер туралы» заңына сәйкес).</string>
+    <string name="register_action">Тіркелу</string>
+    <string name="register_go_to_login">Тіркелгіңіз бар ма? Кіру</string>
+
+    <string name="forgot_password_title">Құпия сөзді қалпына келтіру</string>
+    <string name="forgot_password_subtitle">Электрондық поштаңызды енгізіңіз, сізге қалпына келтіру сілтемесін жібереміз</string>
+    <string name="forgot_password_action">Сілтеме жіберу</string>
+    <string name="forgot_password_sent">Қалпына келтіру сілтемесі жіберілді. Поштаңызды тексеріңіз.</string>
+    <string name="forgot_password_back_to_login">Кіру бетіне оралу</string>
+
+    <!-- Home -->
+    <string name="home_pending_sync_banner">%1$d хабарлама синхрондалуда (интернет жоқ)</string>
+    <string name="home_sos_active_banner">SOS белсенді — көмек шақырылды</string>
+    <string name="home_report_incident_action">Оқиға туралы хабарлау</string>
+    <string name="sos_pick_type_title">Оқиға түрін таңдаңыз</string>
+
+    <!-- SOS -->
+    <string name="sos_button_label">SOS</string>
+    <string name="sos_confirm_title">Көмек шақырылады</string>
+    <string name="sos_confirm_body">%1$s туралы хабарлама жіберіледі және орналасқан жеріңіз жедел қызметтерге жіберіледі.</string>
+    <string name="sos_confirm_cancel">Болдырмау</string>
+    <string name="sos_notification_title">SOS белсенді</string>
+    <string name="sos_notification_locating">Орналасқан жеріңіз анықталуда…</string>
+    <string name="sos_notification_no_location">Орын анықталмады, дегенмен сигнал жіберілуде</string>
+    <string name="sos_notification_active">Дежурлық қызметке жіберілді</string>
+    <string name="sos_notification_queued">Интернет жоқ — байланыс орнатылған кезде жіберіледі</string>
+    <string name="sos_notification_cancel_action">Болдырмау</string>
+    <string name="sos_sms_template">ТӨТЕНШЕ ЖАҒДАЙ! Маған көмек қажет. Менің орналасқан жерім: %1$s</string>
+    <string name="sos_sms_tracking_suffix">Мәртебені осы жерден қадағалаңыз: %1$s</string>
+
+    <!-- Report -->
+    <string name="report_title">Оқиға туралы хабарлау</string>
+    <string name="report_pick_type">Оқиға түрі</string>
+    <string name="report_description_label">Сипаттама</string>
+    <string name="report_address_label">Мекенжай (міндетті емес)</string>
+    <string name="report_photos_label">Фотосуреттер</string>
+    <string name="report_add_photo">Фото қосу</string>
+    <string name="report_anonymous_toggle">Анонимді хабарлау</string>
+    <string name="report_submit_action">Жіберу</string>
+
+    <!-- Feed / History -->
+    <string name="feed_empty">Жақын маңда оқиғалар жоқ</string>
+    <string name="history_empty">Сізде әлі хабарламалар жоқ</string>
+    <string name="incident_detail_title">Оқиға туралы ақпарат</string>
+    <string name="incident_detail_description">Сипаттама</string>
+    <string name="incident_detail_address">Мекенжай</string>
+    <string name="incident_detail_coordinates">Координаттар</string>
+    <string name="incident_detail_cancel">Хабарламаны болдырмау</string>
+    <string name="incident_detail_dispatcher_note">Диспетчер жазбасы</string>
+    <string name="incident_detail_chat_title">Диспетчермен байланыс</string>
+    <string name="incident_detail_chat_empty">Хабарлар әлі жоқ. Диспетчер жағдайды растағанда жазады.</string>
+    <string name="incident_detail_chat_hint">Хабарлама жазыңыз</string>
+    <string name="incident_detail_chat_send">Жіберу</string>
+
+    <string name="status_new">Жаңа</string>
+    <string name="status_acknowledged">Қабылданды</string>
+    <string name="status_dispatched">Жіберілді</string>
+    <string name="status_resolved">Шешілді</string>
+    <string name="status_false_alarm">Жалған дабыл</string>
+    <string name="status_cancelled">Болдырылмады</string>
+
+    <string name="incident_type_crime">Қылмыс</string>
+    <string name="incident_type_fire">Өрт</string>
+    <string name="incident_type_medical">Медициналық жағдай</string>
+    <string name="incident_type_road_accident">Жол апаты</string>
+    <string name="incident_type_domestic_violence">Тұрмыстық зорлық</string>
+    <string name="incident_type_missing_person">Хабарсыз кеткен адам</string>
+    <string name="incident_type_natural_disaster">Табиғи апат</string>
+    <string name="incident_type_gas_leak">Газ ағуы</string>
+    <string name="incident_type_other">Басқа</string>
+
+    <!-- Profile -->
+    <string name="profile_default_name">Пайдаланушы</string>
+    <string name="profile_menu_medical">Медициналық ақпарат</string>
+    <string name="profile_menu_contacts">Шұғыл байланыстар</string>
+    <string name="profile_menu_settings">Баптаулар</string>
+    <string name="profile_menu_sign_out">Шығу</string>
+
+    <!-- Medical -->
+    <string name="medical_title">Медициналық ақпарат</string>
+    <string name="medical_privacy_note">Бұл ақпарат тек сіз SOS шақырғанда ғана жіберіледі және құрылғыда шифрланып сақталады.</string>
+    <string name="medical_blood_type">Қан тобы</string>
+    <string name="medical_allergies">Аллергия (үтірмен бөліңіз)</string>
+    <string name="medical_chronic_conditions">Созылмалы аурулар (үтірмен бөліңіз)</string>
+    <string name="medical_medications">Қабылдайтын дәрі-дәрмектер (үтірмен бөліңіз)</string>
+    <string name="medical_notes">Қосымша ескертпелер</string>
+    <string name="medical_organ_donor">Мүше донорымын</string>
+    <string name="medical_saved_confirmation">Сақталды</string>
+
+    <!-- Contacts -->
+    <string name="contacts_title">Шұғыл байланыстар</string>
+    <string name="contacts_add">Байланыс қосу</string>
+    <string name="contacts_empty">Әлі байланыс қосылмаған</string>
+    <string name="contacts_relationship">Қарым-қатынасы</string>
+    <string name="contacts_phone">Телефон нөмірі</string>
+
+    <!-- Check-in -->
+    <string name="checkin_title">Қауіпсіздік белгісі</string>
+    <string name="checkin_explanation">Қосулы болса, белгіленген уақыт ішінде «Мен қауіпсізбін» деп белгі бермесеңіз, қосымша шұғыл байланыстарыңызға автоматты түрде хабарлайды.</string>
+    <string name="checkin_enable">Қосу</string>
+    <string name="checkin_interval_label">Тексеру аралығы</string>
+    <string name="checkin_hours_format">%1$s сағ</string>
+    <string name="checkin_im_safe_action">Мен қауіпсізбін</string>
+    <string name="checkin_sms_template">Қауіпсіздік белгісі: пайдаланушы жауап бермеді. Соңғы белгілі орны: %1$s</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Баптаулар</string>
+    <string name="settings_section_appearance">Сыртқы түрі</string>
+    <string name="settings_theme">Тақырып</string>
+    <string name="settings_theme_system">Жүйелік</string>
+    <string name="settings_theme_light">Ашық</string>
+    <string name="settings_theme_dark">Қараңғы</string>
+    <string name="settings_high_contrast">Жоғары контраст мәтіні</string>
+    <string name="settings_section_language">Тіл</string>
+    <string name="settings_language_restart_note">Тілді ауыстырғаннан кейін қолданбаны қайта іске қосыңыз</string>
+    <string name="settings_section_safety">Қауіпсіздік</string>
+    <string name="settings_radius_label">Хабарландыру радиусы: %1$d км</string>
+    <string name="settings_silent_sos">Үнсіз SOS (шайқау)</string>
+    <string name="settings_silent_sos_desc">Телефонды 3 рет қатты шайқасаңыз, SOS іске қосылады</string>
+    <string name="settings_section_privacy">Құпиялылық</string>
+    <string name="settings_privacy_note">Есептік жазбаңызды және барлық сақталған деректерді жоюға болады («Дербес деректер туралы» ҚР заңы бойынша сіздің құқығыңыз).</string>
+    <string name="settings_delete_account">Есептік жазбаны жою</string>
+    <string name="settings_delete_confirm_title">Есептік жазбаны жою керек пе?</string>
+    <string name="settings_delete_confirm_body">Бұл әрекетті болдырмау мүмкін емес. Барлық деректеріңіз, соның ішінде медициналық ақпарат пен байланыстар жойылады.</string>
+
+    <!-- Common actions -->
+    <string name="action_save">Сақтау</string>
+    <string name="action_cancel">Болдырмау</string>
+    <string name="action_delete">Жою</string>
+
+    <!-- Fake call -->
+    <string name="fake_call_default_name">Айгүл</string>
+    <string name="fake_call_incoming_label">Кіріс қоңырау</string>
+    <string name="fake_call_decline">Бас тарту</string>
+    <string name="fake_call_answer">Жауап беру</string>
+    <string name="home_fake_call_action">Жалған қоңырау</string>
+    <string name="home_fake_call_scheduled">Жалған қоңырау бірнеше секундтан кейін келеді</string>
+
+    <!-- Notification channels -->
+    <string name="notification_channel_sos_name">SOS дабылдары</string>
+    <string name="notification_channel_sos_desc">Белсенді SOS туралы хабарламалар</string>
+    <string name="notification_channel_alerts_name">Жақын маңдағы оқиғалар</string>
+    <string name="notification_channel_alerts_desc">Аймағыңыздағы жаңа оқиғалар туралы хабарландырулар</string>
+    <string name="notification_channel_checkin_name">Қауіпсіздік белгісі</string>
+    <string name="notification_channel_checkin_desc">Қауіпсіздік белгісін еске салу</string>
+    <string name="notification_channel_fake_call_name">Жалған қоңырау</string>
+    <string name="notification_channel_fake_call_desc">Жоспарланған жалған кіріс қоңырау</string>
+</resources>

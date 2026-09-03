@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Medical data and emergency contacts are sensitive personal data under
+   Kazakhstan's "On Personal Data and Their Protection" law — they are cached
+   locally (encrypted) for offline SOS use, but excluded from Android's
+   auto-backup so they never leave the device to an unencrypted cloud backup.
+-->
+<full-backup-content>
+    <exclude domain="database" path="qlms_offline.db" />
+    <exclude domain="sharedpref" path="qlms_secure_prefs.xml" />
+</full-backup-content>

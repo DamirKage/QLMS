@@ -1,0 +1,90 @@
+rules_version = '2';
+
+// Security model, summarized (see docs/ARCHITECTURE.md for the full write-up):
+//
+//   users/{uid}                        -> only that user (never dispatchers)
+//   users/{uid}/contacts/{contactId}   -> only that user
+//   incidents/{id}                     -> readable by ANY signed-in user (the
+//                                          nearby-incidents feed), writable by
+//                                          its own reporter or a dispatcher.
+//                                          Contains NO medical info or contacts
+//                                          — see below for why.
+//   incidents/{id}/private/dispatch    -> readable/writable only by the
+//                                          reporter and by dispatcher/admin
+//                                          accounts. Holds medicalSnapshot,
+//                                          contactsSnapshot, dispatcherNote.
+//   incidents/{id}/messages/{msgId}    -> live chat between the reporter and
+//                                          a dispatcher on that one incident;
+//                                          same reporter-or-dispatcher access
+//                                          as the private doc. Messages are
+//                                          append-only (no edit/delete).
+//
+// Medical info and emergency contacts are split into a private subdocument
+// on purpose: Firestore rules can only grant or deny a whole document, never
+// individual fields, so if that data lived on the same doc the public feed
+// queries, every citizen browsing nearby incidents could read every SOS
+// caller's blood type and family phone numbers. Splitting it is the only way
+// to keep the public feed genuinely public and the sensitive half genuinely
+// private.
+
+function isSignedIn() {
+  return request.auth != null;
+}
+
+function isOwner(uid) {
+  return isSignedIn() && request.auth.uid == uid;
+}
+
+function userRole() {
+  return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+}
+
+function isDispatcher() {
+  return isSignedIn() &&
+    exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+    userRole() in ['DISPATCHER', 'ADMIN'];
+}
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+
+      match /contacts/{contactId} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    match /incidents/{incidentId} {
+      // Anyone signed in can see the public feed / map.
+      allow read: if isSignedIn();
+
+      // A report can only ever be created as yourself.
+      allow create: if isSignedIn() && request.resource.data.reporterId == request.auth.uid;
+
+      // The reporter may only cancel their own still-open report; a
+      // dispatcher/admin may update status + note (never impersonate a
+      // different reporterId, never delete).
+      allow update: if isDispatcher() ||
+        (isOwner(resource.data.reporterId) &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']) &&
+          request.resource.data.status == 'CANCELLED');
+      allow delete: if false;
+
+      match /private/dispatch {
+        allow read: if isDispatcher() || isOwner(get(/databases/$(database)/documents/incidents/$(incidentId)).data.reporterId);
+        allow write: if isDispatcher() || isOwner(get(/databases/$(database)/documents/incidents/$(incidentId)).data.reporterId);
+      }
+
+      match /messages/{messageId} {
+        function isParticipant() {
+          return isDispatcher() || isOwner(get(/databases/$(database)/documents/incidents/$(incidentId)).data.reporterId);
+        }
+        allow read: if isParticipant();
+        allow create: if isParticipant() && request.resource.data.senderId == request.auth.uid;
+        allow update, delete: if false;
+      }
+    }
+  }
+}

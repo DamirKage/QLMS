@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+        Real theming (colors, typography, dark mode) lives in Compose —
+        ui/theme/Theme.kt. This XML theme only has to exist to satisfy the
+        Activity window before Compose's first frame, and to host the
+        SplashScreen API theme below.
+    -->
+    <style name="Theme.QLMS" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/qlms_surface_light</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="colorPrimary">@color/qlms_blue</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/qlms_white</item>
+    </style>
+
+    <style name="Theme.QLMS.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/qlms_white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/qlms_white</item>
+        <item name="postSplashScreenTheme">@style/Theme.QLMS</item>
+    </style>
+
+</resources>

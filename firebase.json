@@ -1,0 +1,20 @@
+{
+  "firestore": {
+    "rules": "firebase/firestore.rules",
+    "indexes": "firebase/firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "firebase/storage.rules"
+  },
+  "hosting": {
+    "public": "web",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      { "source": "/api/incident-status", "function": "getPublicIncidentStatus" },
+      { "source": "**", "destination": "/index.html" }
+    ]
+  },
+  "functions": {
+    "source": "functions"
+  }
+}

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QLMS</string>
+
+    <string name="onboarding_title_1">Помощь в одно касание</string>
+    <string name="onboarding_body_1">Нажмите кнопку SOS — приложение определит ваше местоположение и немедленно уведомит экстренные службы.</string>
+    <string name="onboarding_title_2">Медицинские данные всегда под рукой</string>
+    <string name="onboarding_body_2">Заранее укажите группу крови, аллергии и экстренные контакты — они передаются только во время SOS.</string>
+    <string name="onboarding_title_3">Безопасность вместе с сообществом</string>
+    <string name="onboarding_body_3">Получайте уведомления о происшествиях в вашем районе и сообщайте о подозрительных ситуациях.</string>
+    <string name="onboarding_get_started">Начать</string>
+    <string name="onboarding_next">Далее</string>
+
+    <string name="nav_home">Главная</string>
+    <string name="nav_feed">Уведомления</string>
+    <string name="nav_history">История</string>
+    <string name="nav_profile">Профиль</string>
+    <string name="nav_checkin">Проверка безопасности</string>
+
+    <string name="login_subtitle">Войдите в приложение безопасности</string>
+    <string name="field_email">Электронная почта</string>
+    <string name="field_password">Пароль</string>
+    <string name="field_confirm_password">Подтвердите пароль</string>
+    <string name="field_full_name">Полное имя</string>
+    <string name="login_forgot_password">Забыли пароль?</string>
+    <string name="login_action">Войти</string>
+    <string name="login_go_to_register">Нет аккаунта? Зарегистрироваться</string>
+    <string name="error_fields_required">Заполните все поля</string>
+    <string name="error_password_mismatch">Пароли не совпадают</string>
+    <string name="error_password_too_short">Пароль должен содержать не менее 6 символов</string>
+
+    <string name="register_title">Регистрация</string>
+    <string name="register_subtitle">Присоединяйтесь к сети безопасности</string>
+    <string name="register_consent_notice">Регистрируясь, вы даёте согласие на обработку персональных данных (в соответствии с Законом РК «О персональных данных»).</string>
+    <string name="register_action">Зарегистрироваться</string>
+    <string name="register_go_to_login">Уже есть аккаунт? Войти</string>
+
+    <string name="forgot_password_title">Восстановление пароля</string>
+    <string name="forgot_password_subtitle">Введите email — мы отправим ссылку для восстановления</string>
+    <string name="forgot_password_action">Отправить ссылку</string>
+    <string name="forgot_password_sent">Ссылка для восстановления отправлена. Проверьте почту.</string>
+    <string name="forgot_password_back_to_login">Вернуться ко входу</string>
+
+    <string name="home_pending_sync_banner">%1$d сообщений синхронизируются (нет интернета)</string>
+    <string name="home_sos_active_banner">SOS активен — помощь вызвана</string>
+    <string name="home_report_incident_action">Сообщить о происшествии</string>
+    <string name="sos_pick_type_title">Выберите тип происшествия</string>
+
+    <string name="sos_button_label">SOS</string>
+    <string name="sos_confirm_title">Вызов помощи</string>
+    <string name="sos_confirm_body">Будет отправлено сообщение «%1$s», а также ваше местоположение — экстренным службам.</string>
+    <string name="sos_confirm_cancel">Отменить</string>
+    <string name="sos_notification_title">SOS активен</string>
+    <string name="sos_notification_locating">Определяем ваше местоположение…</string>
+    <string name="sos_notification_no_location">Место не определено, но сигнал отправляется</string>
+    <string name="sos_notification_active">Передано дежурной службе</string>
+    <string name="sos_notification_queued">Нет сети — будет отправлено при подключении</string>
+    <string name="sos_notification_cancel_action">Отменить</string>
+    <string name="sos_sms_template">ЧРЕЗВЫЧАЙНАЯ СИТУАЦИЯ! Мне нужна помощь. Моё местоположение: %1$s</string>
+    <string name="sos_sms_tracking_suffix">Следите за статусом здесь: %1$s</string>
+
+    <string name="report_title">Сообщить о происшествии</string>
+    <string name="report_pick_type">Тип происшествия</string>
+    <string name="report_description_label">Описание</string>
+    <string name="report_address_label">Адрес (необязательно)</string>
+    <string name="report_photos_label">Фотографии</string>
+    <string name="report_add_photo">Добавить фото</string>
+    <string name="report_anonymous_toggle">Сообщить анонимно</string>
+    <string name="report_submit_action">Отправить</string>
+
+    <string name="feed_empty">Поблизости нет происшествий</string>
+    <string name="history_empty">У вас пока нет сообщений</string>
+    <string name="incident_detail_title">Информация о происшествии</string>
+    <string name="incident_detail_description">Описание</string>
+    <string name="incident_detail_address">Адрес</string>
+    <string name="incident_detail_coordinates">Координаты</string>
+    <string name="incident_detail_cancel">Отменить сообщение</string>
+    <string name="incident_detail_dispatcher_note">Заметка диспетчера</string>
+    <string name="incident_detail_chat_title">Связь с диспетчером</string>
+    <string name="incident_detail_chat_empty">Сообщений пока нет. Диспетчер напишет, когда подтвердит ситуацию.</string>
+    <string name="incident_detail_chat_hint">Напишите сообщение</string>
+    <string name="incident_detail_chat_send">Отправить</string>
+
+    <string name="status_new">Новое</string>
+    <string name="status_acknowledged">Принято</string>
+    <string name="status_dispatched">Направлено</string>
+    <string name="status_resolved">Решено</string>
+    <string name="status_false_alarm">Ложная тревога</string>
+    <string name="status_cancelled">Отменено</string>
+
+    <string name="incident_type_crime">Преступление</string>
+    <string name="incident_type_fire">Пожар</string>
+    <string name="incident_type_medical">Медицинский случай</string>
+    <string name="incident_type_road_accident">ДТП</string>
+    <string name="incident_type_domestic_violence">Бытовое насилие</string>
+    <string name="incident_type_missing_person">Пропавший человек</string>
+    <string name="incident_type_natural_disaster">Стихийное бедствие</string>
+    <string name="incident_type_gas_leak">Утечка газа</string>
+    <string name="incident_type_other">Другое</string>
+
+    <string name="profile_default_name">Пользователь</string>
+    <string name="profile_menu_medical">Медицинская информация</string>
+    <string name="profile_menu_contacts">Экстренные контакты</string>
+    <string name="profile_menu_settings">Настройки</string>
+    <string name="profile_menu_sign_out">Выйти</string>
+
+    <string name="medical_title">Медицинская информация</string>
+    <string name="medical_privacy_note">Эти данные передаются только при вызове SOS и хранятся на устройстве в зашифрованном виде.</string>
+    <string name="medical_blood_type">Группа крови</string>
+    <string name="medical_allergies">Аллергии (через запятую)</string>
+    <string name="medical_chronic_conditions">Хронические заболевания (через запятую)</string>
+    <string name="medical_medications">Принимаемые лекарства (через запятую)</string>
+    <string name="medical_notes">Дополнительные заметки</string>
+    <string name="medical_organ_donor">Донор органов</string>
+    <string name="medical_saved_confirmation">Сохранено</string>
+
+    <string name="contacts_title">Экстренные контакты</string>
+    <string name="contacts_add">Добавить контакт</string>
+    <string name="contacts_empty">Контакты ещё не добавлены</string>
+    <string name="contacts_relationship">Кем приходится</string>
+    <string name="contacts_phone">Номер телефона</string>
+
+    <string name="checkin_title">Проверка безопасности</string>
+    <string name="checkin_explanation">Если включено и вы не отметите «Я в безопасности» вовремя, приложение автоматически уведомит ваши экстренные контакты.</string>
+    <string name="checkin_enable">Включить</string>
+    <string name="checkin_interval_label">Интервал проверки</string>
+    <string name="checkin_hours_format">%1$s ч</string>
+    <string name="checkin_im_safe_action">Я в безопасности</string>
+    <string name="checkin_sms_template">Проверка безопасности: пользователь не ответил. Последнее известное местоположение: %1$s</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="settings_section_appearance">Внешний вид</string>
+    <string name="settings_theme">Тема</string>
+    <string name="settings_theme_system">Системная</string>
+    <string name="settings_theme_light">Светлая</string>
+    <string name="settings_theme_dark">Тёмная</string>
+    <string name="settings_high_contrast">Текст повышенной контрастности</string>
+    <string name="settings_section_language">Язык</string>
+    <string name="settings_language_restart_note">После смены языка перезапустите приложение</string>
+    <string name="settings_section_safety">Безопасность</string>
+    <string name="settings_radius_label">Радиус уведомлений: %1$d км</string>
+    <string name="settings_silent_sos">Тихий SOS (встряхивание)</string>
+    <string name="settings_silent_sos_desc">Три резких встряхивания телефона активируют SOS</string>
+    <string name="settings_section_privacy">Конфиденциальность</string>
+    <string name="settings_privacy_note">Вы можете удалить аккаунт и все сохранённые данные (ваше право по Закону РК «О персональных данных»).</string>
+    <string name="settings_delete_account">Удалить аккаунт</string>
+    <string name="settings_delete_confirm_title">Удалить аккаунт?</string>
+    <string name="settings_delete_confirm_body">Это действие необратимо. Будут удалены все ваши данные, включая медицинскую информацию и контакты.</string>
+
+    <string name="action_save">Сохранить</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_delete">Удалить</string>
+
+    <string name="fake_call_default_name">Айгуль</string>
+    <string name="fake_call_incoming_label">Входящий вызов</string>
+    <string name="fake_call_decline">Отклонить</string>
+    <string name="fake_call_answer">Ответить</string>
+    <string name="home_fake_call_action">Фальшивый звонок</string>
+    <string name="home_fake_call_scheduled">Фальшивый звонок поступит через несколько секунд</string>
+
+    <string name="notification_channel_sos_name">Сигналы SOS</string>
+    <string name="notification_channel_sos_desc">Уведомления об активном SOS</string>
+    <string name="notification_channel_alerts_name">Происшествия рядом</string>
+    <string name="notification_channel_alerts_desc">Уведомления о новых происшествиях в вашем районе</string>
+    <string name="notification_channel_checkin_name">Проверка безопасности</string>
+    <string name="notification_channel_checkin_desc">Напоминания о проверке безопасности</string>
+    <string name="notification_channel_fake_call_name">Фальшивый звонок</string>
+    <string name="notification_channel_fake_call_desc">Запланированный фальшивый входящий звонок</string>
+</resources>

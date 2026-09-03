@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QLMS Dispatch</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+  <div id="configBanner" class="config-banner">
+    Firebase не настроен. Заполните <code>web/js/firebase-config.js</code> — см. docs/SETUP.md.
+  </div>
+
+  <div class="app-shell">
+    <div class="topbar">
+      <div class="brand"><span class="dot"></span> QLMS Dispatch</div>
+      <div class="user-info">
+        <span id="userEmail"></span>
+        <button class="link" id="signOutBtn">Шығу</button>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card new"><div class="value" id="statNew">0</div><div class="label">Жаңа</div></div>
+      <div class="stat-card progress"><div class="value" id="statProgress">0</div><div class="label">Өңделуде</div></div>
+      <div class="stat-card resolved"><div class="value" id="statResolved">0</div><div class="label">Шешілді</div></div>
+      <div class="stat-card"><div class="value" id="statTotal">0</div><div class="label">Барлығы (24 сағ)</div></div>
+    </div>
+
+    <div class="main-grid">
+      <div class="incident-list-panel">
+        <div class="filter-bar" id="filterBar">
+          <div class="filter-chip active" data-filter="ALL">Барлығы</div>
+          <div class="filter-chip" data-filter="NEW">Жаңа</div>
+          <div class="filter-chip" data-filter="ACKNOWLEDGED">Қабылданды</div>
+          <div class="filter-chip" data-filter="DISPATCHED">Жіберілді</div>
+          <div class="filter-chip" data-filter="RESOLVED">Шешілді</div>
+        </div>
+        <div id="incidentList"></div>
+      </div>
+
+      <div id="map"></div>
+
+      <div class="detail-panel" id="detailPanel">
+        <div class="empty-hint">Тізімнен оқиғаны таңдаңыз</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

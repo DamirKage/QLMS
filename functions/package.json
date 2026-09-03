@@ -1,0 +1,11 @@
+{
+  "name": "qlms-functions",
+  "description": "Reference Cloud Functions for the QLMS app (see index.js docstring) — not deployed by default.",
+  "engines": { "node": "20" },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.5.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "private": true
+}
