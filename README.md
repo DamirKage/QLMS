@@ -75,6 +75,3 @@ firebase/            Firestore/Storage security rules, indexes
 docs/                Architecture notes and setup guide
 ```
 
-## License / attribution
-
-Academic/portfolio project. Built with [Claude Code](https://claude.com/claude-code).
