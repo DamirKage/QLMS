@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import kz.qlms.app.R
 import kz.qlms.app.data.model.Incident
 import kz.qlms.app.data.model.IncidentStatus
 import kz.qlms.app.ui.theme.QlmsSosColors
@@ -60,6 +63,15 @@ fun IncidentCard(incident: Incident, onClick: () -> Unit) {
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                             )
                         }
+                    }
+                    if (incident.isCommunityVerified) {
+                        Spacer(Modifier.width(6.dp))
+                        Icon(
+                            Icons.Filled.Verified,
+                            contentDescription = stringResource(R.string.incident_verified_badge),
+                            tint = QlmsSosColors.SuccessContainer,
+                            modifier = Modifier.size(16.dp),
+                        )
                     }
                 }
                 if (incident.description.isNotBlank()) {

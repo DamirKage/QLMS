@@ -20,6 +20,13 @@
  *      SDK bypasses rules) and it returns a deliberately narrow field subset
  *      for exactly one id — no reporter identity, no description text.
  *
+ *   4. getPublicTripStatus — the same narrow-read pattern as (3), for
+ *      web/trip.html, the link a traveler shares from Trip mode. The
+ *      `trips` Firestore rule (see firebase/firestore.rules) locks the
+ *      collection to its owner only, so this function — not a rule change —
+ *      is what lets someone holding the link see live progress without
+ *      signing in and without being able to browse anyone else's trip.
+ *
  * Deploy with: firebase deploy --only functions   (after `firebase init functions`
  * in this folder and filling in a real Firebase project).
  */
@@ -89,6 +96,29 @@ exports.getPublicIncidentStatus = onRequest({ cors: true }, async (req, res) => 
   const data = snap.data();
   const publicView = {};
   for (const field of PUBLIC_FIELDS) {
+    if (data[field] !== undefined) publicView[field] = data[field];
+  }
+  res.status(200).json(publicView);
+});
+
+const PUBLIC_TRIP_FIELDS = ["destination", "statusName", "latitude", "longitude", "expectedArrivalAtEpochMs", "updatedAt"];
+
+exports.getPublicTripStatus = onRequest({ cors: true }, async (req, res) => {
+  const id = req.query.id;
+  if (!id || typeof id !== "string") {
+    res.status(400).json({ error: "missing id" });
+    return;
+  }
+
+  const snap = await getFirestore().collection("trips").doc(id).get();
+  if (!snap.exists) {
+    res.status(404).json({ error: "not found" });
+    return;
+  }
+
+  const data = snap.data();
+  const publicView = {};
+  for (const field of PUBLIC_TRIP_FIELDS) {
     if (data[field] !== undefined) publicView[field] = data[field];
   }
   res.status(200).json(publicView);

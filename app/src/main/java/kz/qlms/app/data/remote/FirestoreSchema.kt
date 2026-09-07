@@ -4,6 +4,7 @@ package kz.qlms.app.data.remote
 object FirestoreSchema {
     const val USERS = "users"
     const val INCIDENTS = "incidents"
+    const val TRIPS = "trips"
 
     object UserFields {
         const val MEDICAL_PROFILE = "medicalProfile" // map field on the user doc
@@ -16,5 +17,8 @@ object FirestoreSchema {
         const val STATUS = "status"
         const val CREATED_AT = "createdAt"
         const val IS_SOS = "isSosTriggered"
+        const val CONFIRM_COUNT = "confirmCount"
+        const val DISPUTE_COUNT = "disputeCount"
+        const val VERIFICATIONS = "verifications" // subcollection, one doc per uid
     }
 }

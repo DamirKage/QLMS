@@ -16,6 +16,7 @@ import kz.qlms.app.data.model.IncidentType
 import kz.qlms.app.service.SosForegroundService
 import kz.qlms.app.ui.QlmsApp
 import kz.qlms.app.ui.theme.QlmsTheme
+import kz.qlms.app.util.CrashDetector
 import kz.qlms.app.util.ShakeDetector
 
 class MainActivity : ComponentActivity() {
@@ -37,6 +38,18 @@ class MainActivity : ComponentActivity() {
                     val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
                     ShakeDetector(sensorManager) {
                         SosForegroundService.start(applicationContext, IncidentType.OTHER)
+                    }.also { it.start() }
+                } else {
+                    null
+                }
+                onDispose { detector?.stop() }
+            }
+
+            DisposableEffect(settings.crashDetectionEnabled) {
+                val detector = if (settings.crashDetectionEnabled) {
+                    val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+                    CrashDetector(sensorManager) {
+                        SosForegroundService.start(applicationContext, IncidentType.ROAD_ACCIDENT)
                     }.also { it.start() }
                 } else {
                     null

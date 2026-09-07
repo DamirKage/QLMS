@@ -64,10 +64,15 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 import kz.qlms.app.R
 import kz.qlms.app.core.rememberAppContainer
+import kz.qlms.app.data.model.AppSettings
 import kz.qlms.app.data.model.IncidentType
+import kz.qlms.app.data.model.SosTriggerMode
 import kz.qlms.app.service.FakeCallScheduler
+import kz.qlms.app.service.SirenController
 import kz.qlms.app.service.SosForegroundService
 import kz.qlms.app.ui.components.IncidentTypeGrid
+import kz.qlms.app.ui.sos.HoldToArmButton
+import kz.qlms.app.ui.sos.PinCancelSheet
 import kz.qlms.app.ui.sos.SosButton
 import kz.qlms.app.ui.sos.SosConfirmSheet
 import kz.qlms.app.ui.theme.QlmsSosColors
@@ -114,8 +119,25 @@ fun HomeScreen(
 
     var showTypePicker by remember { mutableStateOf(false) }
     var pendingType by remember { mutableStateOf<IncidentType?>(null) }
+    var showPinCancel by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     val fakeCallDefaultName = stringResource(R.string.fake_call_default_name)
+    val settings by container.settingsDataStore.settingsFlow.collectAsState(initial = AppSettings())
+
+    fun fireSos(type: IncidentType) {
+        scope.launch {
+            if (!sosPermissions.allPermissionsGranted) sosPermissions.launchMultiplePermissionRequest()
+            SosForegroundService.start(context, type)
+            if (settings.panicSirenEnabled) SirenController.start(context)
+            val hasCallPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) ==
+                android.content.pm.PackageManager.PERMISSION_GRANTED
+            if (hasCallPermission) {
+                PhoneUtils.callEmergencyNumber(context, type.referenceNumber.ifBlank { "112" })
+            } else {
+                PhoneUtils.dialEmergencyNumber(context, type.referenceNumber.ifBlank { "112" })
+            }
+        }
+    }
 
     LaunchedEffect(locationPermissions.allPermissionsGranted) {
         if (locationPermissions.allPermissionsGranted) {
@@ -168,6 +190,21 @@ fun HomeScreen(
                     color = QlmsSosColors.ActionRed,
                     contentColor = Color.White,
                 )
+                var sirenOn by remember { mutableStateOf(SirenController.isActive) }
+                Surface(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.padding(top = 6.dp).clickable {
+                        if (sirenOn) SirenController.stop(context) else SirenController.start(context)
+                        sirenOn = !sirenOn
+                    },
+                ) {
+                    Text(
+                        text = stringResource(if (sirenOn) R.string.home_siren_mute else R.string.home_siren_unmute),
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                    )
+                }
             }
         }
 
@@ -205,7 +242,11 @@ fun HomeScreen(
                 .padding(bottom = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            SosButton(onClick = { showTypePicker = true })
+            if (settings.sosTriggerMode == SosTriggerMode.HOLD_TO_ARM && container.userRepository.hasSafetyPin()) {
+                HoldToArmButton(onArmedAndReleased = { showPinCancel = true })
+            } else {
+                SosButton(onClick = { showTypePicker = true })
+            }
             Spacer(Modifier.height(8.dp))
             Surface(
                 shape = CircleShape,
@@ -253,17 +294,18 @@ fun HomeScreen(
             onDismiss = { pendingType = null },
             onConfirmed = {
                 pendingType = null
-                scope.launch {
-                    if (!sosPermissions.allPermissionsGranted) sosPermissions.launchMultiplePermissionRequest()
-                    SosForegroundService.start(context, type)
-                    val hasCallPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) ==
-                        android.content.pm.PackageManager.PERMISSION_GRANTED
-                    if (hasCallPermission) {
-                        PhoneUtils.callEmergencyNumber(context, type.referenceNumber.ifBlank { "112" })
-                    } else {
-                        PhoneUtils.dialEmergencyNumber(context, type.referenceNumber.ifBlank { "112" })
-                    }
-                }
+                fireSos(type)
+            },
+        )
+    }
+
+    if (showPinCancel) {
+        PinCancelSheet(
+            checkPin = { container.userRepository.checkSafetyPin(it) },
+            onCorrectPin = { showPinCancel = false },
+            onCountdownExpired = {
+                showPinCancel = false
+                fireSos(IncidentType.OTHER)
             },
         )
     }

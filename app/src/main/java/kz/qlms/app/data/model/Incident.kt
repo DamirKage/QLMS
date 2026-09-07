@@ -32,6 +32,9 @@ data class Incident(
     @get:PropertyName("status") @set:PropertyName("status")
     var statusName: String = IncidentStatus.NEW.name,
     var hasPrivateDetails: Boolean = false,
+    /** Community verification tally — see [IncidentVerification]. Anyone signed in may confirm/dispute; never the reporter's own report. */
+    var confirmCount: Int = 0,
+    var disputeCount: Int = 0,
     @ServerTimestamp var createdAt: Date? = null,
     @ServerTimestamp var updatedAt: Date? = null,
 ) {
@@ -42,4 +45,14 @@ data class Incident(
     @get:Exclude
     val status: IncidentStatus
         get() = IncidentStatus.fromFirestoreValue(statusName)
+
+    /** A report earns a visible "confirmed by the community" badge once enough net confirmations outweigh disputes. */
+    @get:Exclude
+    val isCommunityVerified: Boolean
+        get() = confirmCount - disputeCount >= VERIFIED_NET_THRESHOLD && confirmCount >= VERIFIED_MIN_VOTES
+
+    companion object {
+        private const val VERIFIED_NET_THRESHOLD = 3
+        private const val VERIFIED_MIN_VOTES = 3
+    }
 }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import kz.qlms.app.data.local.SettingsDataStore
 import kz.qlms.app.data.model.AppLanguage
 import kz.qlms.app.data.model.AppSettings
+import kz.qlms.app.data.model.SosTriggerMode
 import kz.qlms.app.data.model.ThemeMode
 import kz.qlms.app.data.repository.AuthRepository
 import kz.qlms.app.data.repository.UserRepository
@@ -32,6 +33,18 @@ class SettingsViewModel(
     fun setRadiusKm(radiusKm: Double) = viewModelScope.launch { settingsDataStore.setNearbyRadiusKm(radiusKm) }
     fun setHighContrast(enabled: Boolean) = viewModelScope.launch { settingsDataStore.setHighContrastText(enabled) }
     fun setSilentSos(enabled: Boolean) = viewModelScope.launch { settingsDataStore.setSilentSosEnabled(enabled) }
+    fun setCrashDetection(enabled: Boolean) = viewModelScope.launch { settingsDataStore.setCrashDetectionEnabled(enabled) }
+    fun setPanicSiren(enabled: Boolean) = viewModelScope.launch { settingsDataStore.setPanicSirenEnabled(enabled) }
+
+    fun hasSafetyPin(): Boolean = userRepository.hasSafetyPin()
+
+    /** Setting HOLD_TO_ARM without a PIN would strand the user with no way to cancel a false arm, so the caller must save a PIN first. */
+    fun setSosTriggerMode(mode: SosTriggerMode) = viewModelScope.launch { settingsDataStore.setSosTriggerMode(mode) }
+
+    fun saveSafetyPinAndArm(pin: String) {
+        userRepository.saveSafetyPin(pin)
+        setSosTriggerMode(SosTriggerMode.HOLD_TO_ARM)
+    }
 
     fun deleteAccountAndData() {
         val uid = authRepository.currentUser?.uid ?: return

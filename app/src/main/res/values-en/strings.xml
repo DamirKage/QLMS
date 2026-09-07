@@ -43,6 +43,8 @@
 
     <string name="home_pending_sync_banner">%1$d reports syncing (offline)</string>
     <string name="home_sos_active_banner">SOS active — help is on the way</string>
+    <string name="home_siren_mute">Mute siren</string>
+    <string name="home_siren_unmute">Sound siren</string>
     <string name="home_report_incident_action">Report an incident</string>
     <string name="sos_pick_type_title">Select incident type</string>
 
@@ -80,6 +82,11 @@
     <string name="incident_detail_chat_empty">No messages yet. The dispatcher will write once they confirm your situation.</string>
     <string name="incident_detail_chat_hint">Write a message</string>
     <string name="incident_detail_chat_send">Send</string>
+    <string name="incident_verified_badge">Confirmed by the community</string>
+    <string name="incident_verify_title">Is this still accurate?</string>
+    <string name="incident_verify_subtitle">Help keep the feed reliable — confirm or dispute what you see here.</string>
+    <string name="incident_verify_confirm">Confirm (%1$d)</string>
+    <string name="incident_verify_dispute">Dispute (%1$d)</string>
 
     <string name="status_new">New</string>
     <string name="status_acknowledged">Acknowledged</string>
@@ -126,7 +133,29 @@
     <string name="checkin_interval_label">Check-in interval</string>
     <string name="checkin_hours_format">%1$s h</string>
     <string name="checkin_im_safe_action">I\'m safe</string>
+
+    <string name="trip_title">Walk me home</string>
+    <string name="trip_explanation">Share a live route with your contacts. If you don\'t confirm arrival by the time you set, they\'re alerted automatically with your last known location.</string>
+    <string name="trip_destination_label">Where are you headed?</string>
+    <string name="trip_duration_label">Expected arrival in</string>
+    <string name="trip_minutes_format">%1$s min</string>
+    <string name="trip_start_action">Start trip</string>
+    <string name="trip_active_heading">Trip in progress</string>
+    <string name="trip_active_destination">Heading to %1$s</string>
+    <string name="trip_share_link_action">Share tracking link</string>
+    <string name="trip_share_message">I\'m on my way to %1$s. Follow my live location: %2$s</string>
+    <string name="trip_arrived_action_button">I arrived safely</string>
+    <string name="trip_cancel_action">Cancel trip</string>
+    <string name="trip_status_active">Active — tracking your location</string>
+    <string name="trip_status_arrived">Arrived safely</string>
+    <string name="trip_status_alerted">Overdue — contacts have been alerted</string>
+    <string name="trip_status_cancelled">Cancelled</string>
+    <string name="profile_menu_trip">Walk me home</string>
     <string name="checkin_sms_template">Safety check-in: the user hasn\'t responded. Last known location: %1$s</string>
+    <string name="trip_notification_title">Trip in progress</string>
+    <string name="trip_notification_text">Heading to %1$s — sharing live location</string>
+    <string name="trip_arrived_action">I arrived</string>
+    <string name="trip_overdue_sms_template">Trip alert: the user hasn\'t confirmed arrival by the expected time. Last known location: %1$s</string>
 
     <string name="settings_title">Settings</string>
     <string name="settings_section_appearance">Appearance</string>
@@ -141,6 +170,17 @@
     <string name="settings_radius_label">Alert radius: %1$d km</string>
     <string name="settings_silent_sos">Silent SOS (shake)</string>
     <string name="settings_silent_sos_desc">Three hard shakes of the phone trigger SOS</string>
+    <string name="settings_sos_trigger_label">SOS button behavior</string>
+    <string name="settings_sos_trigger_tap">Tap, then confirm</string>
+    <string name="settings_sos_trigger_hold">Hold to arm</string>
+    <string name="settings_panic_siren">Panic siren + flashlight</string>
+    <string name="settings_panic_siren_desc">Sound a loud alarm and strobe the flashlight while SOS is active</string>
+    <string name="settings_crash_detection">Automatic crash detection</string>
+    <string name="settings_crash_detection_desc">Detect a hard impact followed by stillness and trigger SOS automatically</string>
+    <string name="settings_set_pin_title">Set a safety PIN</string>
+    <string name="settings_set_pin_body">Hold-to-arm needs a PIN so you can cancel a false alarm within %1$d seconds. Choose 4–6 digits.</string>
+    <string name="settings_pin_label">Safety PIN</string>
+    <string name="settings_pin_save_action">Save and enable</string>
     <string name="settings_section_privacy">Privacy</string>
     <string name="settings_privacy_note">You can delete your account and all stored data (your right under Kazakhstan\'s "On Personal Data" law).</string>
     <string name="settings_delete_account">Delete account</string>
@@ -150,6 +190,14 @@
     <string name="action_save">Save</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_delete">Delete</string>
+
+    <string name="hold_sos_label">HOLD</string>
+    <string name="hold_sos_release_label">RELEASE</string>
+    <string name="pin_cancel_title">%1$d</string>
+    <string name="pin_cancel_body">Help is being called. Enter your safety PIN to cancel.</string>
+    <string name="pin_cancel_field_label">Safety PIN</string>
+    <string name="pin_cancel_wrong">Wrong PIN</string>
+    <string name="pin_cancel_action">Confirm</string>
 
     <string name="fake_call_default_name">Aigul</string>
     <string name="fake_call_incoming_label">Incoming call</string>

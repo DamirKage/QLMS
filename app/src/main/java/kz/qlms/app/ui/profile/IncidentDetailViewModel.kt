@@ -6,9 +6,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flowOf
 import kz.qlms.app.data.model.Incident
 import kz.qlms.app.data.model.IncidentMessage
 import kz.qlms.app.data.model.IncidentPrivateDetails
+import kz.qlms.app.data.model.VerificationVote
 import kz.qlms.app.data.repository.AuthRepository
 import kz.qlms.app.data.repository.IncidentRepository
 
@@ -31,8 +33,17 @@ class IncidentDetailViewModel(
 
     val currentUid: String? get() = authRepository.currentUser?.uid
 
+    val myVerificationVote: StateFlow<VerificationVote?> =
+        (currentUid?.let { incidentRepository.observeMyVerificationVote(incidentId, it) } ?: flowOf(null))
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
     fun cancel(incidentId: String) {
         viewModelScope.launch { incidentRepository.cancelIncident(incidentId) }
+    }
+
+    fun castVerificationVote(vote: VerificationVote) {
+        val uid = currentUid ?: return
+        viewModelScope.launch { incidentRepository.castVerificationVote(incidentId, uid, vote) }
     }
 
     fun sendMessage(text: String) {

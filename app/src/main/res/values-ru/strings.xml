@@ -43,6 +43,8 @@
 
     <string name="home_pending_sync_banner">%1$d сообщений синхронизируются (нет интернета)</string>
     <string name="home_sos_active_banner">SOS активен — помощь вызвана</string>
+    <string name="home_siren_mute">Выключить сирену</string>
+    <string name="home_siren_unmute">Включить сирену</string>
     <string name="home_report_incident_action">Сообщить о происшествии</string>
     <string name="sos_pick_type_title">Выберите тип происшествия</string>
 
@@ -80,6 +82,11 @@
     <string name="incident_detail_chat_empty">Сообщений пока нет. Диспетчер напишет, когда подтвердит ситуацию.</string>
     <string name="incident_detail_chat_hint">Напишите сообщение</string>
     <string name="incident_detail_chat_send">Отправить</string>
+    <string name="incident_verified_badge">Подтверждено сообществом</string>
+    <string name="incident_verify_title">Это всё ещё актуально?</string>
+    <string name="incident_verify_subtitle">Помогите сохранить достоверность ленты — подтвердите или оспорьте увиденное.</string>
+    <string name="incident_verify_confirm">Подтвердить (%1$d)</string>
+    <string name="incident_verify_dispute">Оспорить (%1$d)</string>
 
     <string name="status_new">Новое</string>
     <string name="status_acknowledged">Принято</string>
@@ -126,7 +133,29 @@
     <string name="checkin_interval_label">Интервал проверки</string>
     <string name="checkin_hours_format">%1$s ч</string>
     <string name="checkin_im_safe_action">Я в безопасности</string>
+
+    <string name="trip_title">Проводи меня домой</string>
+    <string name="trip_explanation">Делитесь маршрутом с контактами в реальном времени. Если вы не подтвердите прибытие к назначенному времени, они получат уведомление с вашим последним известным местоположением.</string>
+    <string name="trip_destination_label">Куда вы направляетесь?</string>
+    <string name="trip_duration_label">Ожидаемое прибытие через</string>
+    <string name="trip_minutes_format">%1$s мин</string>
+    <string name="trip_start_action">Начать поездку</string>
+    <string name="trip_active_heading">Поездка в процессе</string>
+    <string name="trip_active_destination">Направляется в %1$s</string>
+    <string name="trip_share_link_action">Поделиться ссылкой отслеживания</string>
+    <string name="trip_share_message">Я направляюсь в %1$s. Следите за моим местоположением: %2$s</string>
+    <string name="trip_arrived_action_button">Я благополучно прибыл(а)</string>
+    <string name="trip_cancel_action">Отменить поездку</string>
+    <string name="trip_status_active">Активна — местоположение отслеживается</string>
+    <string name="trip_status_arrived">Благополучно прибыл(а)</string>
+    <string name="trip_status_alerted">Просрочено — контакты уведомлены</string>
+    <string name="trip_status_cancelled">Отменена</string>
+    <string name="profile_menu_trip">Проводи меня домой</string>
     <string name="checkin_sms_template">Проверка безопасности: пользователь не ответил. Последнее известное местоположение: %1$s</string>
+    <string name="trip_notification_title">Поездка в процессе</string>
+    <string name="trip_notification_text">Направляется в %1$s — трансляция местоположения включена</string>
+    <string name="trip_arrived_action">Я прибыл(а)</string>
+    <string name="trip_overdue_sms_template">Внимание: пользователь не подтвердил прибытие к назначенному времени. Последнее известное местоположение: %1$s</string>
 
     <string name="settings_title">Настройки</string>
     <string name="settings_section_appearance">Внешний вид</string>
@@ -141,6 +170,17 @@
     <string name="settings_radius_label">Радиус уведомлений: %1$d км</string>
     <string name="settings_silent_sos">Тихий SOS (встряхивание)</string>
     <string name="settings_silent_sos_desc">Три резких встряхивания телефона активируют SOS</string>
+    <string name="settings_sos_trigger_label">Поведение кнопки SOS</string>
+    <string name="settings_sos_trigger_tap">Нажать, затем подтвердить</string>
+    <string name="settings_sos_trigger_hold">Удерживать для активации</string>
+    <string name="settings_panic_siren">Сирена и фонарик</string>
+    <string name="settings_panic_siren_desc">Громкая сирена и мигающий фонарик, пока SOS активен</string>
+    <string name="settings_crash_detection">Автоматическое обнаружение ДТП</string>
+    <string name="settings_crash_detection_desc">Определяет сильный удар и последующую неподвижность, автоматически активирует SOS</string>
+    <string name="settings_set_pin_title">Установите PIN-код безопасности</string>
+    <string name="settings_set_pin_body">Для режима удержания нужен PIN, чтобы вы могли отменить ложную тревогу за %1$d секунд. Выберите 4–6 цифр.</string>
+    <string name="settings_pin_label">PIN-код безопасности</string>
+    <string name="settings_pin_save_action">Сохранить и включить</string>
     <string name="settings_section_privacy">Конфиденциальность</string>
     <string name="settings_privacy_note">Вы можете удалить аккаунт и все сохранённые данные (ваше право по Закону РК «О персональных данных»).</string>
     <string name="settings_delete_account">Удалить аккаунт</string>
@@ -150,6 +190,14 @@
     <string name="action_save">Сохранить</string>
     <string name="action_cancel">Отмена</string>
     <string name="action_delete">Удалить</string>
+
+    <string name="hold_sos_label">УДЕРЖИВАЙТЕ</string>
+    <string name="hold_sos_release_label">ОТПУСТИТЕ</string>
+    <string name="pin_cancel_title">%1$d</string>
+    <string name="pin_cancel_body">Вызывается помощь. Введите код безопасности, чтобы отменить.</string>
+    <string name="pin_cancel_field_label">Код безопасности</string>
+    <string name="pin_cancel_wrong">Неверный код</string>
+    <string name="pin_cancel_action">Подтвердить</string>
 
     <string name="fake_call_default_name">Айгуль</string>
     <string name="fake_call_incoming_label">Входящий вызов</string>

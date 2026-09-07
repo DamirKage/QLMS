@@ -11,6 +11,7 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       { "source": "/api/incident-status", "function": "getPublicIncidentStatus" },
+      { "source": "/api/trip-status", "function": "getPublicTripStatus" },
       { "source": "**", "destination": "/index.html" }
     ]
   },

@@ -72,6 +72,14 @@ class UserRepository(
         )
     }
 
+    // --- Safety PIN for hold-to-arm SOS cancellation — device-local only, never synced. ---
+
+    fun hasSafetyPin(): Boolean = securePrefs.hasSafetyPin()
+
+    fun checkSafetyPin(candidate: String): Boolean = securePrefs.getSafetyPin() == candidate
+
+    fun saveSafetyPin(pin: String) = securePrefs.saveSafetyPin(pin)
+
     /** Deletes the Firestore profile + contacts subcollection and wipes the local encrypted cache. Call before AuthRepository.deleteAccount(). */
     suspend fun deleteAllUserData(uid: String): QlmsResult<Unit> = runCatching {
         userDoc(uid).collection(FirestoreSchema.UserFields.CONTACTS).get().await().documents.forEach { it.reference.delete() }

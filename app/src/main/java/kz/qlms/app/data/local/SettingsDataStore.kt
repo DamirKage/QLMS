@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kz.qlms.app.data.model.AppLanguage
 import kz.qlms.app.data.model.AppSettings
+import kz.qlms.app.data.model.SosTriggerMode
 import kz.qlms.app.data.model.ThemeMode
 
 private val Context.dataStore by preferencesDataStore(name = "qlms_settings")
@@ -29,6 +30,9 @@ class SettingsDataStore(private val context: Context) {
         val ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
         val LAST_CHECK_IN = longPreferencesKey("last_check_in_epoch_ms")
         val CHECK_IN_ALERT_SENT = booleanPreferencesKey("check_in_alert_sent")
+        val SOS_TRIGGER_MODE = stringPreferencesKey("sos_trigger_mode")
+        val CRASH_DETECTION = booleanPreferencesKey("crash_detection_enabled")
+        val PANIC_SIREN = booleanPreferencesKey("panic_siren_enabled")
     }
 
     val lastCheckInFlow: Flow<Long> = context.dataStore.data.map { it[Keys.LAST_CHECK_IN] ?: System.currentTimeMillis() }
@@ -62,7 +66,22 @@ class SettingsDataStore(private val context: Context) {
             silentSosEnabled = prefs[Keys.SILENT_SOS] ?: false,
             checkInEnabled = prefs[Keys.CHECK_IN_ENABLED] ?: false,
             checkInIntervalMinutes = prefs[Keys.CHECK_IN_INTERVAL] ?: 120L,
+            sosTriggerMode = prefs[Keys.SOS_TRIGGER_MODE]?.let { runCatching { SosTriggerMode.valueOf(it) }.getOrNull() } ?: SosTriggerMode.TAP_CONFIRM,
+            crashDetectionEnabled = prefs[Keys.CRASH_DETECTION] ?: false,
+            panicSirenEnabled = prefs[Keys.PANIC_SIREN] ?: true,
         )
+    }
+
+    suspend fun setSosTriggerMode(mode: SosTriggerMode) {
+        context.dataStore.edit { it[Keys.SOS_TRIGGER_MODE] = mode.name }
+    }
+
+    suspend fun setCrashDetectionEnabled(enabled: Boolean) {
+        context.dataStore.edit { it[Keys.CRASH_DETECTION] = enabled }
+    }
+
+    suspend fun setPanicSirenEnabled(enabled: Boolean) {
+        context.dataStore.edit { it[Keys.PANIC_SIREN] = enabled }
     }
 
     suspend fun setThemeMode(mode: ThemeMode) {

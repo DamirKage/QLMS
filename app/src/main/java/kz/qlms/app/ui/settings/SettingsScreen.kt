@@ -39,9 +39,13 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kz.qlms.app.R
 import kz.qlms.app.core.rememberAppContainer
+import kz.qlms.app.core.Constants
 import kz.qlms.app.data.model.AppLanguage
+import kz.qlms.app.data.model.SosTriggerMode
 import kz.qlms.app.data.model.ThemeMode
 import kz.qlms.app.ui.components.QlmsDangerButton
+import kz.qlms.app.ui.components.QlmsPrimaryButton
+import kz.qlms.app.ui.components.QlmsTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +59,7 @@ fun SettingsScreen(onNavigateBack: () -> Unit, onSignedOut: () -> Unit) {
     val settings by viewModel.settings.collectAsState()
     val accountDeleted by viewModel.accountDeleted.collectAsState()
     var showDeleteConfirm by remember { mutableStateOf(false) }
+    var showSetPin by remember { mutableStateOf(false) }
 
     LaunchedEffect(accountDeleted) {
         if (accountDeleted) onSignedOut()
@@ -127,6 +132,54 @@ fun SettingsScreen(onNavigateBack: () -> Unit, onSignedOut: () -> Unit) {
                 Switch(checked = settings.silentSosEnabled, onCheckedChange = viewModel::setSilentSos)
             }
 
+            Spacer(Modifier.height(16.dp))
+            Text(stringResource(R.string.settings_sos_trigger_label), style = MaterialTheme.typography.titleSmall)
+            Spacer(Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(
+                    selected = settings.sosTriggerMode == SosTriggerMode.TAP_CONFIRM,
+                    onClick = { viewModel.setSosTriggerMode(SosTriggerMode.TAP_CONFIRM) },
+                    label = { Text(stringResource(R.string.settings_sos_trigger_tap)) },
+                )
+                FilterChip(
+                    selected = settings.sosTriggerMode == SosTriggerMode.HOLD_TO_ARM,
+                    onClick = {
+                        if (viewModel.hasSafetyPin()) {
+                            viewModel.setSosTriggerMode(SosTriggerMode.HOLD_TO_ARM)
+                        } else {
+                            showSetPin = true
+                        }
+                    },
+                    label = { Text(stringResource(R.string.settings_sos_trigger_hold)) },
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.settings_panic_siren))
+                    Text(
+                        stringResource(R.string.settings_panic_siren_desc),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Switch(checked = settings.panicSirenEnabled, onCheckedChange = viewModel::setPanicSiren)
+            }
+
+            Spacer(Modifier.height(16.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.settings_crash_detection))
+                    Text(
+                        stringResource(R.string.settings_crash_detection_desc),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Switch(checked = settings.crashDetectionEnabled, onCheckedChange = viewModel::setCrashDetection)
+            }
+
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             SectionLabel(stringResource(R.string.settings_section_privacy))
@@ -140,6 +193,42 @@ fun SettingsScreen(onNavigateBack: () -> Unit, onSignedOut: () -> Unit) {
                 Text(stringResource(R.string.settings_delete_account), color = MaterialTheme.colorScheme.error)
             }
         }
+    }
+
+    if (showSetPin) {
+        var pin by remember { mutableStateOf("") }
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { showSetPin = false },
+            title = { Text(stringResource(R.string.settings_set_pin_title)) },
+            text = {
+                Column {
+                    Text(
+                        stringResource(R.string.settings_set_pin_body, Constants.HOLD_TO_ARM_GRACE_SECONDS),
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(bottom = 12.dp),
+                    )
+                    QlmsTextField(
+                        value = pin,
+                        onValueChange = { if (it.length <= 6 && it.all(Char::isDigit)) pin = it },
+                        label = stringResource(R.string.settings_pin_label),
+                        keyboardType = androidx.compose.ui.text.input.KeyboardType.NumberPassword,
+                    )
+                }
+            },
+            confirmButton = {
+                QlmsPrimaryButton(
+                    text = stringResource(R.string.settings_pin_save_action),
+                    enabled = pin.length in 4..6,
+                    onClick = {
+                        viewModel.saveSafetyPinAndArm(pin)
+                        showSetPin = false
+                    },
+                )
+            },
+            dismissButton = {
+                TextButton(onClick = { showSetPin = false }) { Text(stringResource(R.string.action_cancel)) }
+            },
+        )
     }
 
     if (showDeleteConfirm) {

@@ -30,6 +30,7 @@ import kz.qlms.app.ui.profile.IncidentDetailScreen
 import kz.qlms.app.ui.profile.ProfileScreen
 import kz.qlms.app.ui.report.ReportIncidentScreen
 import kz.qlms.app.ui.settings.SettingsScreen
+import kz.qlms.app.ui.trip.TripScreen
 
 @Composable
 fun QlmsNavGraph(
@@ -97,6 +98,7 @@ fun QlmsNavGraph(
                 onNavigateToMedical = { navController.navigate(Screen.MedicalInfo.route) },
                 onNavigateToContacts = { navController.navigate(Screen.EmergencyContacts.route) },
                 onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
+                onNavigateToTrip = { navController.navigate(Screen.Trip.route) },
                 onSignOut = { navController.navigateAndClear(Screen.Login.route) },
             )
         }
@@ -121,6 +123,9 @@ fun QlmsNavGraph(
         }
         composable(Screen.CheckIn.route) {
             CheckInScreen(onNavigateBack = { navController.popBackStack() })
+        }
+        composable(Screen.Trip.route) {
+            TripScreen(onNavigateBack = { navController.popBackStack() })
         }
         composable(
             route = Screen.IncidentDetail.route,

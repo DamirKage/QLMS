@@ -95,8 +95,18 @@ class SecurePrefsManager(context: Context) {
         return (0 until length()).map { getString(it) }
     }
 
+    /** The PIN a user enters to stand down a hold-to-arm SOS before it auto-fires. */
+    fun saveSafetyPin(pin: String) {
+        prefs.edit().putString(KEY_SAFETY_PIN, pin).apply()
+    }
+
+    fun getSafetyPin(): String? = prefs.getString(KEY_SAFETY_PIN, null)
+
+    fun hasSafetyPin(): Boolean = !getSafetyPin().isNullOrBlank()
+
     companion object {
         private const val KEY_MEDICAL = "medical_profile"
         private const val KEY_CONTACTS = "emergency_contacts"
+        private const val KEY_SAFETY_PIN = "safety_pin"
     }
 }

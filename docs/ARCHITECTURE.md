@@ -31,9 +31,17 @@ users/{uid}                         profile (name, email, role, language)
 users/{uid}/contacts/{contactId}    emergency contacts
 incidents/{id}                      PUBLIC: type, status, description,
                                      address, lat/lon, geohash, photos,
-                                     isSosTriggered, reporterId, timestamps
+                                     isSosTriggered, reporterId, timestamps,
+                                     confirmCount, disputeCount
 incidents/{id}/private/dispatch     PRIVATE: medicalSnapshot,
                                      contactsSnapshot, dispatcherNote
+incidents/{id}/messages/{msgId}     live reporter <-> dispatcher chat
+incidents/{id}/verifications/{uid}  one community confirm/dispute vote
+                                     per uid — see "Community verification"
+trips/{id}                          "walk me home": destination, status,
+                                     live lat/lon, expected arrival, contacts
+                                     snapshot — owner-only, never part of
+                                     the incidents feed (see below)
 ```
 
 ### Why the private subdocument exists
@@ -48,6 +56,30 @@ allergies, and family's phone numbers. Splitting sensitive fields into
 `DISPATCHER`/`ADMIN` accounts — is the only way to keep the public feed
 genuinely public and the sensitive half genuinely private. See
 `firebase/firestore.rules` for the enforcement.
+
+### Why Trip mode is its own collection, not an incident
+
+A "walk me home" trip is not an emergency — most of them end in "arrived
+safely" — so it gets none of the incidents feed's shared visibility. `trips`
+is locked to its own owner in `firestore.rules` (`isOwner(resource.data.userId)`);
+a dispatcher account has no special access to it, and it never appears in
+the dispatcher web panel (see the note in the console's incident detail
+view). The no-login link a traveler shares with contacts is served the same
+way as the incident tracking link — a narrow Cloud Function
+(`getPublicTripStatus`) reading one document at a time, never direct
+Firestore access — so sharing a trip link can't be turned into browsing
+anyone else's trips.
+
+### Why community verification is a subcollection vote, not a public field
+
+`confirmCount`/`disputeCount` are the numbers the feed actually displays,
+but they're never written directly by a client — each vote is a transaction
+that also writes (or deletes) that voter's own doc at
+`incidents/{id}/verifications/{uid}`, so a person can hold at most one vote
+per incident and can change their mind. `firestore.rules` restricts a
+non-reporter's update to just those two aggregate fields (a reporter can't
+vote on their own report), which keeps abuse bounded to "one vote per
+account" without needing a moderation backend.
 
 ## What was wrong with the original, and what changed
 

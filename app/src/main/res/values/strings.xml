@@ -48,6 +48,8 @@
     <!-- Home -->
     <string name="home_pending_sync_banner">%1$d хабарлама синхрондалуда (интернет жоқ)</string>
     <string name="home_sos_active_banner">SOS белсенді — көмек шақырылды</string>
+    <string name="home_siren_mute">Сиренаны өшіру</string>
+    <string name="home_siren_unmute">Сиренаны қосу</string>
     <string name="home_report_incident_action">Оқиға туралы хабарлау</string>
     <string name="sos_pick_type_title">Оқиға түрін таңдаңыз</string>
 
@@ -88,6 +90,11 @@
     <string name="incident_detail_chat_empty">Хабарлар әлі жоқ. Диспетчер жағдайды растағанда жазады.</string>
     <string name="incident_detail_chat_hint">Хабарлама жазыңыз</string>
     <string name="incident_detail_chat_send">Жіберу</string>
+    <string name="incident_verified_badge">Қауымдастық растаған</string>
+    <string name="incident_verify_title">Бұл әлі де ақиқат па?</string>
+    <string name="incident_verify_subtitle">Лентаның дұрыстығын сақтауға көмектесіңіз — көргеніңізді растаңыз немесе даулаңыз.</string>
+    <string name="incident_verify_confirm">Растау (%1$d)</string>
+    <string name="incident_verify_dispute">Дауласу (%1$d)</string>
 
     <string name="status_new">Жаңа</string>
     <string name="status_acknowledged">Қабылданды</string>
@@ -138,7 +145,29 @@
     <string name="checkin_interval_label">Тексеру аралығы</string>
     <string name="checkin_hours_format">%1$s сағ</string>
     <string name="checkin_im_safe_action">Мен қауіпсізбін</string>
+
+    <string name="trip_title">Үйге дейін шығарып сал</string>
+    <string name="trip_explanation">Бағытыңызды байланыс адамдарыңызбен нақты уақытта бөлісіңіз. Белгіленген уақытта келгеніңізді растамасаңыз, олар соңғы белгілі орныңызбен бірге автоматты түрде хабардар етіледі.</string>
+    <string name="trip_destination_label">Қайда бара жатырсыз?</string>
+    <string name="trip_duration_label">Күтілетін келу уақыты</string>
+    <string name="trip_minutes_format">%1$s мин</string>
+    <string name="trip_start_action">Сапарды бастау</string>
+    <string name="trip_active_heading">Сапар жүріп жатыр</string>
+    <string name="trip_active_destination">%1$s бағытында</string>
+    <string name="trip_share_link_action">Бақылау сілтемесімен бөлісу</string>
+    <string name="trip_share_message">Мен %1$s бағытында келе жатырмын. Орналасқан жерімді осы жерден қадағалаңыз: %2$s</string>
+    <string name="trip_arrived_action_button">Мен сәтті келдім</string>
+    <string name="trip_cancel_action">Сапарды болдырмау</string>
+    <string name="trip_status_active">Белсенді — орналасқан жері қадағалануда</string>
+    <string name="trip_status_arrived">Сәтті келді</string>
+    <string name="trip_status_alerted">Мерзімі өтті — байланыс адамдары хабардар етілді</string>
+    <string name="trip_status_cancelled">Болдырылмады</string>
+    <string name="profile_menu_trip">Үйге дейін шығарып сал</string>
     <string name="checkin_sms_template">Қауіпсіздік белгісі: пайдаланушы жауап бермеді. Соңғы белгілі орны: %1$s</string>
+    <string name="trip_notification_title">Сапар жүріп жатыр</string>
+    <string name="trip_notification_text">%1$s бағытында — орналасқан жеріңіз тікелей көрсетілуде</string>
+    <string name="trip_arrived_action">Мен келдім</string>
+    <string name="trip_overdue_sms_template">Назар аударыңыз: пайдаланушы белгіленген уақытта келгенін растамады. Соңғы белгілі орны: %1$s</string>
 
     <!-- Settings -->
     <string name="settings_title">Баптаулар</string>
@@ -154,6 +183,17 @@
     <string name="settings_radius_label">Хабарландыру радиусы: %1$d км</string>
     <string name="settings_silent_sos">Үнсіз SOS (шайқау)</string>
     <string name="settings_silent_sos_desc">Телефонды 3 рет қатты шайқасаңыз, SOS іске қосылады</string>
+    <string name="settings_sos_trigger_label">SOS түймесінің тәртібі</string>
+    <string name="settings_sos_trigger_tap">Басу, содан кейін растау</string>
+    <string name="settings_sos_trigger_hold">Іске қосу үшін ұстап тұру</string>
+    <string name="settings_panic_siren">Сирена және фонарик</string>
+    <string name="settings_panic_siren_desc">SOS белсенді болғанда қатты сирена және жыпылықтайтын фонарик іске қосылады</string>
+    <string name="settings_crash_detection">ДТП-ны автоматты анықтау</string>
+    <string name="settings_crash_detection_desc">Қатты соққыны және одан кейінгі қозғалыссыздықты анықтап, SOS-ты автоматты түрде іске қосады</string>
+    <string name="settings_set_pin_title">Қауіпсіздік PIN-кодын орнатыңыз</string>
+    <string name="settings_set_pin_body">Ұстап тұру режимі үшін жалған дабылды %1$d секунд ішінде болдырмау үшін PIN керек. 4–6 сан таңдаңыз.</string>
+    <string name="settings_pin_label">Қауіпсіздік PIN-коды</string>
+    <string name="settings_pin_save_action">Сақтау және қосу</string>
     <string name="settings_section_privacy">Құпиялылық</string>
     <string name="settings_privacy_note">Есептік жазбаңызды және барлық сақталған деректерді жоюға болады («Дербес деректер туралы» ҚР заңы бойынша сіздің құқығыңыз).</string>
     <string name="settings_delete_account">Есептік жазбаны жою</string>
@@ -164,6 +204,15 @@
     <string name="action_save">Сақтау</string>
     <string name="action_cancel">Болдырмау</string>
     <string name="action_delete">Жою</string>
+
+    <!-- Hold-to-arm SOS -->
+    <string name="hold_sos_label">ҰСТАП\nТҰРЫҢЫЗ</string>
+    <string name="hold_sos_release_label">ЖІБЕРІҢІЗ</string>
+    <string name="pin_cancel_title">%1$d</string>
+    <string name="pin_cancel_body">Көмек шақырылады. Болдырмау үшін қауіпсіздік кодын енгізіңіз.</string>
+    <string name="pin_cancel_field_label">Қауіпсіздік коды</string>
+    <string name="pin_cancel_wrong">Код қате</string>
+    <string name="pin_cancel_action">Растау</string>
 
     <!-- Fake call -->
     <string name="fake_call_default_name">Айгүл</string>

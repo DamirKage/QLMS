@@ -72,6 +72,13 @@ function markerColor(incident) {
   return "#0b4da6";
 }
 
+// Mirrors Incident.isCommunityVerified on the Android client — same thresholds.
+function isCommunityVerified(incident) {
+  const confirm = incident.confirmCount || 0;
+  const dispute = incident.disputeCount || 0;
+  return confirm - dispute >= 3 && confirm >= 3;
+}
+
 function renderMarkers() {
   const seen = new Set();
   incidents.forEach((incident) => {
@@ -143,7 +150,7 @@ function renderList() {
     <div class="incident-item ${incident.isSosTriggered ? "sos" : ""} ${incident.id === selectedId ? "selected" : ""}" data-id="${incident.id}">
       <div class="icon">${TYPE_ICONS[incident.type] ?? "❓"}</div>
       <div>
-        <div class="title">${escapeHtml(TYPE_LABELS[incident.type] ?? incident.type)} ${incident.isSosTriggered ? "· SOS" : ""}</div>
+        <div class="title">${escapeHtml(TYPE_LABELS[incident.type] ?? incident.type)} ${incident.isSosTriggered ? "· SOS" : ""} ${isCommunityVerified(incident) ? "✓" : ""}</div>
         <div class="meta">${escapeHtml(incident.address || formatCoords(incident))}</div>
         <div class="meta">${formatTime(incident.createdAt)}</div>
         <span class="badge ${incident.status}">${STATUS_LABELS[incident.status] ?? incident.status}</span>
@@ -218,6 +225,13 @@ function renderDetail(incident) {
     <h2>${escapeHtml(TYPE_LABELS[incident.type] ?? incident.type)}</h2>
     <span class="badge ${incident.status}">${STATUS_LABELS[incident.status] ?? incident.status}</span>
 
+    <div class="section">
+      <h3>Қауымдастық растауы</h3>
+      <div class="detail-row">
+        <span class="k">Растады:</span> ${incident.confirmCount || 0} · <span class="k">Даулады:</span> ${incident.disputeCount || 0}
+        ${isCommunityVerified(incident) ? ' · <span class="badge RESOLVED">Расталған</span>' : ""}
+      </div>
+    </div>
     <div class="section">
       <h3>Сипаттама</h3>
       <div class="detail-row">${escapeHtml(incident.description || "—")}</div>

@@ -18,6 +18,23 @@ rules_version = '2';
 //                                          same reporter-or-dispatcher access
 //                                          as the private doc. Messages are
 //                                          append-only (no edit/delete).
+//   incidents/{id}/verifications/{uid} -> one community confirm/dispute vote
+//                                          per uid, writable only by that uid;
+//                                          the incident doc's confirmCount /
+//                                          disputeCount aggregate is the only
+//                                          part of a report any signed-in
+//                                          (non-reporter) user may update.
+//   trips/{id}                         -> "walk me home": readable/writable
+//                                          only by the traveler themselves,
+//                                          never by other citizens or by
+//                                          dispatchers — it isn't an
+//                                          emergency, so it gets none of the
+//                                          incidents feed's shared visibility.
+//                                          The no-login tracking link a
+//                                          traveler shares works through the
+//                                          getPublicTripStatus Cloud Function
+//                                          (admin SDK, one doc at a time),
+//                                          never through a client rule here.
 //
 // Medical info and emergency contacts are split into a private subdocument
 // on purpose: Firestore rules can only grant or deny a whole document, never
@@ -69,7 +86,13 @@ service cloud.firestore {
       allow update: if isDispatcher() ||
         (isOwner(resource.data.reporterId) &&
           request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']) &&
-          request.resource.data.status == 'CANCELLED');
+          request.resource.data.status == 'CANCELLED') ||
+        // Community verification: any signed-in user except the reporter may
+        // adjust only the confirm/dispute aggregate (kept honest by the
+        // per-uid vote doc + transaction in IncidentRepository, not by this
+        // rule alone — Firestore rules can't verify an increment's size).
+        (isSignedIn() && !isOwner(resource.data.reporterId) &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['confirmCount', 'disputeCount', 'updatedAt']));
       allow delete: if false;
 
       match /private/dispatch {
@@ -85,6 +108,18 @@ service cloud.firestore {
         allow create: if isParticipant() && request.resource.data.senderId == request.auth.uid;
         allow update, delete: if false;
       }
+
+      match /verifications/{uid} {
+        allow read: if isSignedIn();
+        allow write: if isOwner(uid) &&
+          !isOwner(get(/databases/$(database)/documents/incidents/$(incidentId)).data.reporterId);
+      }
+    }
+
+    match /trips/{tripId} {
+      allow read, update: if isOwner(resource.data.userId);
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow delete: if false;
     }
   }
 }

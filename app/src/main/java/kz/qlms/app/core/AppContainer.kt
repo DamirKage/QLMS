@@ -9,6 +9,7 @@ import kz.qlms.app.data.local.SecurePrefsManager
 import kz.qlms.app.data.local.SettingsDataStore
 import kz.qlms.app.data.repository.AuthRepository
 import kz.qlms.app.data.repository.IncidentRepository
+import kz.qlms.app.data.repository.TripRepository
 import kz.qlms.app.data.repository.UserRepository
 
 /**
@@ -33,4 +34,5 @@ class AppContainer(context: Context) {
     val incidentRepository by lazy {
         IncidentRepository(appContext, firestore, storage, database.pendingIncidentDao())
     }
+    val tripRepository by lazy { TripRepository(firestore) }
 }

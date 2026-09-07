@@ -90,6 +90,11 @@
             android:foregroundServiceType="location" />
 
         <service
+            android:name=".service.TripForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <service
             android:name=".service.QlmsFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
@@ -99,6 +104,10 @@
 
         <receiver
             android:name=".service.SosActionReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".service.TripActionReceiver"
             android:exported="false" />
 
         <receiver

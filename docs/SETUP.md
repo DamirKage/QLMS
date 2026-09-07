@@ -129,10 +129,13 @@ live-tracking link (`web/track.html`) that can ride along in the SOS SMS to
 emergency contacts. That page deliberately never talks to Firestore directly
 — only this function can read it, and it returns a narrow field subset for
 one incident id at a time, so the link can't be used to browse anyone else's
-reports. After deploying, set `TRACKING_BASE_URL` in `local.properties` (§6)
-to your Hosting domain and rebuild the app for the link to start appearing
-in SOS messages. None of this is required for the core SOS/report/dispatch
-flow to work.
+reports. `getPublicTripStatus` / `web/trip.html` are the same pattern for a
+shared Trip-mode ("walk me home") link — the `trips` Firestore rule locks
+that collection to its own owner, so this function is the only way a link
+recipient sees live progress without signing in. After deploying, set
+`TRACKING_BASE_URL` in `local.properties` (§6) to your Hosting domain and
+rebuild the app for the link to start appearing in SOS messages. None of
+this is required for the core SOS/report/dispatch flow to work.
 
 ## 9. Testing the SOS flow end to end
 

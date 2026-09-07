@@ -121,6 +121,7 @@ class SosForegroundService : Service() {
     override fun onDestroy() {
         _isActive.value = false
         _currentIncidentId.value = null
+        SirenController.stop(applicationContext)
         scope.cancel()
         super.onDestroy()
     }

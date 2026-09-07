@@ -16,7 +16,9 @@ object Constants {
     const val EMERGENCY_NUMBER_GAS = "104"
 
     const val SOS_COUNTDOWN_SECONDS = 5
+    const val HOLD_TO_ARM_GRACE_SECONDS = 6
     const val SOS_LOCATION_UPDATE_INTERVAL_MS = 5_000L
+    const val TRIP_LOCATION_UPDATE_INTERVAL_MS = 20_000L
     const val DEFAULT_NEARBY_RADIUS_KM = 5.0
     const val CHECK_IN_MAX_INTERVAL_MINUTES = 24 * 60L
 

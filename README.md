@@ -8,7 +8,10 @@ for crime and emergency prevention (QLMS)", 2024) and this repository is a
 ground-up rebuild of it: same mission, current Android stack, and every gap
 between what the original thesis promised and what it actually shipped
 closed. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the detailed
-before/after.
+before/after, and [`docs/MARKET_RESEARCH.md`](docs/MARKET_RESEARCH.md) for
+how QLMS compares to Kazakhstan's official "112" app and international
+safety apps (Noonlight, bSafe, Life360, Citizen, RapidSOS) — and what that
+comparison changed in this build.
 
 ## What's here
 
@@ -25,6 +28,22 @@ before/after.
   captured, an incident is created, your chosen emergency contacts get an SMS
   with a map link, and the phone dials Kazakhstan's unified **112** emergency
   line (falling back to `101`/`102`/`103`/`104` per incident type when useful).
+- **Hold-to-arm SOS mode** — an alternative trigger for when a stray tap would
+  be dangerous (pocket-dial, a struggle): hold the button ~1.1s to arm, then a
+  6-second PIN-cancel window before it actually fires.
+- **Panic siren + flashlight strobe** — while SOS is active, optionally sound
+  a loud alarm and strobe the camera flash to draw attention and disorient an
+  attacker, mutable at any time from the active-SOS banner.
+- **Walk me home (Trip mode)** — share a live route and an expected-arrival
+  time with your contacts; if you don't confirm arrival, they're alerted
+  automatically with your last known location. Always private to the
+  traveler and their own contacts — never part of the shared incident feed.
+- **Community verification** — anyone (but the reporter) can confirm or
+  dispute a feed report; reports with enough net confirmations get a visible
+  "confirmed by the community" badge, in both the app and the dispatcher panel.
+- **Automatic crash/fall detection** — an opt-in heuristic (hard impact
+  followed by stillness) that triggers SOS on its own, without continuous
+  background location tracking.
 - **Incident reporting** — crime, fire, medical, road accident, domestic
   violence, missing person, natural disaster, gas leak, or other — with a
   description, address, and photos, anonymously if you choose.

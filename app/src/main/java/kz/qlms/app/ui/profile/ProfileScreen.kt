@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.ContactPhone
+import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -46,6 +47,7 @@ fun ProfileScreen(
     onNavigateToMedical: () -> Unit,
     onNavigateToContacts: () -> Unit,
     onNavigateToSettings: () -> Unit,
+    onNavigateToTrip: () -> Unit,
     onSignOut: () -> Unit,
 ) {
     val container = rememberAppContainer()
@@ -84,6 +86,7 @@ fun ProfileScreen(
 
             ProfileMenuItem(Icons.Filled.HealthAndSafety, stringResource(R.string.profile_menu_medical), onNavigateToMedical)
             ProfileMenuItem(Icons.Filled.ContactPhone, stringResource(R.string.profile_menu_contacts), onNavigateToContacts)
+            ProfileMenuItem(Icons.Filled.DirectionsWalk, stringResource(R.string.profile_menu_trip), onNavigateToTrip)
             ProfileMenuItem(Icons.Filled.Settings, stringResource(R.string.profile_menu_settings), onNavigateToSettings)
             ProfileMenuItem(
                 icon = Icons.AutoMirrored.Filled.Logout,

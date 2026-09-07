@@ -8,6 +8,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
@@ -29,6 +30,8 @@ import kz.qlms.app.data.local.toStringListFromJsonArray
 import kz.qlms.app.data.model.Incident
 import kz.qlms.app.data.model.IncidentPrivateDetails
 import kz.qlms.app.data.model.IncidentStatus
+import kz.qlms.app.data.model.IncidentVerification
+import kz.qlms.app.data.model.VerificationVote
 import kz.qlms.app.data.remote.FirestoreSchema
 import kz.qlms.app.data.worker.PendingIncidentSyncWorker
 import kz.qlms.app.util.GeoHash
@@ -46,6 +49,8 @@ class IncidentRepository(
         incidentsCollection().document(incidentId).collection("private").document("dispatch")
     private fun messagesCollection(incidentId: String) =
         incidentsCollection().document(incidentId).collection("messages")
+    private fun verificationsCollection(incidentId: String) =
+        incidentsCollection().document(incidentId).collection(FirestoreSchema.IncidentFields.VERIFICATIONS)
 
     /**
      * Always queues locally first (Room), then a WorkManager job (see
@@ -184,6 +189,51 @@ class IncidentRepository(
         onSuccess = { QlmsResult.Success(Unit) },
         onFailure = { QlmsResult.Error(it.message ?: "Could not send message", it) },
     )
+
+    /** The signed-in user's own vote on this incident, or null if they haven't voted (or just undid it). */
+    fun observeMyVerificationVote(incidentId: String, uid: String): Flow<VerificationVote?> = callbackFlow {
+        val registration = verificationsCollection(incidentId).document(uid).addSnapshotListener { snapshot, _ ->
+            trySend(snapshot?.toObject(IncidentVerification::class.java)?.vote)
+        }
+        awaitClose { registration.remove() }
+    }
+
+    /**
+     * Casts, switches, or withdraws (tap the same choice twice) a community
+     * verification vote. Runs as a transaction so the per-user vote doc and
+     * the incident's aggregate confirmCount/disputeCount never drift apart
+     * even under concurrent votes from different people.
+     */
+    suspend fun castVerificationVote(incidentId: String, uid: String, vote: VerificationVote): QlmsResult<Unit> = runCatching {
+        val incidentRef = incidentsCollection().document(incidentId)
+        val voteRef = verificationsCollection(incidentId).document(uid)
+        firestore.runTransaction { txn ->
+            val previousVote = txn.get(voteRef).toObject(IncidentVerification::class.java)?.vote
+            when {
+                previousVote == vote -> {
+                    txn.delete(voteRef)
+                    txn.update(incidentRef, countFieldOf(vote), FieldValue.increment(-1))
+                }
+                previousVote != null -> {
+                    txn.set(voteRef, IncidentVerification(voteName = vote.name))
+                    txn.update(incidentRef, countFieldOf(previousVote), FieldValue.increment(-1))
+                    txn.update(incidentRef, countFieldOf(vote), FieldValue.increment(1))
+                }
+                else -> {
+                    txn.set(voteRef, IncidentVerification(voteName = vote.name))
+                    txn.update(incidentRef, countFieldOf(vote), FieldValue.increment(1))
+                }
+            }
+        }.await()
+    }.fold(
+        onSuccess = { QlmsResult.Success(Unit) },
+        onFailure = { QlmsResult.Error(it.message ?: "Could not record vote", it) },
+    )
+
+    private fun countFieldOf(vote: VerificationVote) = when (vote) {
+        VerificationVote.CONFIRM -> FirestoreSchema.IncidentFields.CONFIRM_COUNT
+        VerificationVote.DISPUTE -> FirestoreSchema.IncidentFields.DISPUTE_COUNT
+    }
 
     suspend fun cancelIncident(incidentId: String): QlmsResult<Unit> = runCatching {
         incidentsCollection().document(incidentId)
