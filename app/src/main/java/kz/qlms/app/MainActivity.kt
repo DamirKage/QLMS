@@ -37,7 +37,10 @@ class MainActivity : ComponentActivity() {
                 val detector = if (settings.silentSosEnabled) {
                     val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
                     ShakeDetector(sensorManager) {
-                        SosForegroundService.start(applicationContext, IncidentType.OTHER)
+                        // A shake never had a call UI to confirm through, so it's
+                        // always text-only — the dispatcher must know no one is
+                        // going to pick up if they call this number back.
+                        SosForegroundService.start(applicationContext, IncidentType.OTHER, isTextOnly = true)
                     }.also { it.start() }
                 } else {
                     null
@@ -48,8 +51,13 @@ class MainActivity : ComponentActivity() {
             DisposableEffect(settings.crashDetectionEnabled) {
                 val detector = if (settings.crashDetectionEnabled) {
                     val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-                    CrashDetector(sensorManager) {
-                        SosForegroundService.start(applicationContext, IncidentType.ROAD_ACCIDENT)
+                    CrashDetector(sensorManager) { peakImpactG ->
+                        SosForegroundService.start(
+                            applicationContext,
+                            IncidentType.ROAD_ACCIDENT,
+                            isTextOnly = true,
+                            impactForceG = peakImpactG.toDouble(),
+                        )
                     }.also { it.start() }
                 } else {
                     null

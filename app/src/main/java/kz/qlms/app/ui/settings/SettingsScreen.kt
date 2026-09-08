@@ -180,6 +180,53 @@ fun SettingsScreen(onNavigateBack: () -> Unit, onSignedOut: () -> Unit) {
                 Switch(checked = settings.crashDetectionEnabled, onCheckedChange = viewModel::setCrashDetection)
             }
 
+            Spacer(Modifier.height(16.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.settings_text_only_default))
+                    Text(
+                        stringResource(R.string.settings_text_only_default_desc),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Switch(checked = settings.textOnlySosDefault, onCheckedChange = viewModel::setTextOnlySosDefault)
+            }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+
+            SectionLabel(stringResource(R.string.settings_section_aml))
+            Text(
+                text = stringResource(R.string.settings_aml_explanation),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(12.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.settings_aml_enable), modifier = Modifier.weight(1f))
+                Switch(
+                    checked = settings.amlSmsEnabled,
+                    onCheckedChange = { viewModel.setAmlSms(it, settings.amlSmsGatewayNumber) },
+                )
+            }
+            if (settings.amlSmsEnabled) {
+                Spacer(Modifier.height(10.dp))
+                var gatewayDraft by remember(settings.amlSmsGatewayNumber) { mutableStateOf(settings.amlSmsGatewayNumber) }
+                QlmsTextField(
+                    value = gatewayDraft,
+                    onValueChange = { gatewayDraft = it },
+                    label = stringResource(R.string.settings_aml_number_label),
+                    keyboardType = androidx.compose.ui.text.input.KeyboardType.Phone,
+                    supportingText = stringResource(R.string.settings_aml_number_hint),
+                )
+                Spacer(Modifier.height(8.dp))
+                QlmsPrimaryButton(
+                    text = stringResource(R.string.action_save),
+                    enabled = gatewayDraft != settings.amlSmsGatewayNumber,
+                    onClick = { viewModel.setAmlSms(true, gatewayDraft.trim()) },
+                )
+            }
+
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             SectionLabel(stringResource(R.string.settings_section_privacy))

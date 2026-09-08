@@ -35,6 +35,8 @@ class SettingsViewModel(
     fun setSilentSos(enabled: Boolean) = viewModelScope.launch { settingsDataStore.setSilentSosEnabled(enabled) }
     fun setCrashDetection(enabled: Boolean) = viewModelScope.launch { settingsDataStore.setCrashDetectionEnabled(enabled) }
     fun setPanicSiren(enabled: Boolean) = viewModelScope.launch { settingsDataStore.setPanicSirenEnabled(enabled) }
+    fun setAmlSms(enabled: Boolean, gatewayNumber: String) = viewModelScope.launch { settingsDataStore.setAmlSms(enabled, gatewayNumber) }
+    fun setTextOnlySosDefault(enabled: Boolean) = viewModelScope.launch { settingsDataStore.setTextOnlySosDefault(enabled) }
 
     fun hasSafetyPin(): Boolean = userRepository.hasSafetyPin()
 

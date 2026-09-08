@@ -16,8 +16,36 @@
     <div class="topbar">
       <div class="brand"><span class="dot"></span> QLMS Dispatch</div>
       <div class="user-info">
+        <button class="link" id="sendAlertBtn">Аймақтық хабарландыру жіберу</button>
         <span id="userEmail"></span>
         <button class="link" id="signOutBtn">Шығу</button>
+      </div>
+    </div>
+
+    <div id="alertOverlay" class="alert-overlay" hidden>
+      <div class="alert-modal">
+        <h3>Аймақтық қауіпсіздік хабарландыруы</h3>
+        <p class="alert-modal-hint">
+          Барлық жақын тұрған тұрғындарға push-хабарлама жіберіледі (су тасқыны,
+          адам іздеу, қауіп ескертуі және т.б.) — 112-ге керісінше бағыт.
+        </p>
+        <label>Тақырып</label>
+        <input type="text" id="alertTitleInput" placeholder="Мысалы: Су тасқыны қаупі" />
+        <label>Мәтін</label>
+        <textarea id="alertBodyInput" rows="3" placeholder="Тұрғындарға арналған нақты нұсқаулар…"></textarea>
+        <label>Дәрежесі</label>
+        <select id="alertSeveritySelect">
+          <option value="INFO">Ақпарат</option>
+          <option value="WARNING" selected>Ескерту</option>
+          <option value="CRITICAL">Төтенше</option>
+        </select>
+        <label>Радиусы (км) — картаны басып орталықты таңдаңыз</label>
+        <input type="range" id="alertRadiusInput" min="1" max="50" value="5" />
+        <div class="alert-radius-value"><span id="alertRadiusValue">5</span> км, орталық: <span id="alertCenterValue">—</span></div>
+        <div class="status-actions">
+          <button id="alertPublishBtn">Жариялау</button>
+          <button id="alertCancelBtn" class="danger">Болдырмау</button>
+        </div>
       </div>
     </div>
 

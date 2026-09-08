@@ -46,6 +46,17 @@ class QlmsApplication : Application() {
 
         manager.createNotificationChannel(
             NotificationChannel(
+                Constants.NOTIFICATION_CHANNEL_AREA_ALERTS,
+                getString(R.string.notification_channel_area_alerts_name),
+                NotificationManager.IMPORTANCE_HIGH,
+            ).apply {
+                description = getString(R.string.notification_channel_area_alerts_desc)
+                enableVibration(true)
+            },
+        )
+
+        manager.createNotificationChannel(
+            NotificationChannel(
                 Constants.NOTIFICATION_CHANNEL_CHECKIN,
                 getString(R.string.notification_channel_checkin_name),
                 NotificationManager.IMPORTANCE_HIGH,

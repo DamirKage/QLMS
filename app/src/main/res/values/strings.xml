@@ -58,6 +58,8 @@
     <string name="sos_confirm_title">Көмек шақырылады</string>
     <string name="sos_confirm_body">%1$s туралы хабарлама жіберіледі және орналасқан жеріңіз жедел қызметтерге жіберіледі.</string>
     <string name="sos_confirm_cancel">Болдырмау</string>
+    <string name="sos_confirm_text_only_label">Тек мәтін (автоматты қоңыраусыз)</string>
+    <string name="sos_confirm_text_only_desc">Сөйлеу қауіпсіз болмаса пайдаланыңыз — диспетчер орналасқан жеріңізді бәрібір алады, тек чат арқылы байланыса алады.</string>
     <string name="sos_notification_title">SOS белсенді</string>
     <string name="sos_notification_locating">Орналасқан жеріңіз анықталуда…</string>
     <string name="sos_notification_no_location">Орын анықталмады, дегенмен сигнал жіберілуде</string>
@@ -65,6 +67,7 @@
     <string name="sos_notification_queued">Интернет жоқ — байланыс орнатылған кезде жіберіледі</string>
     <string name="sos_notification_cancel_action">Болдырмау</string>
     <string name="sos_sms_template">ТӨТЕНШЕ ЖАҒДАЙ! Маған көмек қажет. Менің орналасқан жерім: %1$s</string>
+    <string name="aml_sms_template">QLMS төтенше хабарламасы — нақты орналасқан жері: %1$s (автоматты түрде жіберілді, жауап қажет емес)</string>
     <string name="sos_sms_tracking_suffix">Мәртебені осы жерден қадағалаңыз: %1$s</string>
 
     <!-- Report -->
@@ -194,6 +197,13 @@
     <string name="settings_set_pin_body">Ұстап тұру режимі үшін жалған дабылды %1$d секунд ішінде болдырмау үшін PIN керек. 4–6 сан таңдаңыз.</string>
     <string name="settings_pin_label">Қауіпсіздік PIN-коды</string>
     <string name="settings_pin_save_action">Сақтау және қосу</string>
+    <string name="settings_text_only_default">Ұстап тұру/шайқау/ДТП SOS әдепкі бойынша тек мәтін</string>
+    <string name="settings_text_only_default_desc">Растау экраны жоқ жағдайда қолданылады — диспетчер орналасқан жеріңізді алады, бірақ кері қоңырау шалмайды</string>
+    <string name="settings_section_aml">Автоматты орналасқан жер SMS-і</string>
+    <string name="settings_aml_explanation">Еуропалық телефондардағы Advanced Mobile Location істейтінді қайталайды: SOS іске қосылған сәтте дәл GPS координаттары таңдалған нөмірге SMS арқылы жіберіледі — 112-ге қоңырауға қосымша, оның орнына емес.</string>
+    <string name="settings_aml_enable">SOS кезінде автоматты орналасқан жер SMS-ін жіберу</string>
+    <string name="settings_aml_number_label">Шлюз нөмірі</string>
+    <string name="settings_aml_number_hint">SMS қабылдай алатын нөмір — жергілікті 112 қызметінен мұндай хабарларды қабылдай ма екенін сұраңыз</string>
     <string name="settings_section_privacy">Құпиялылық</string>
     <string name="settings_privacy_note">Есептік жазбаңызды және барлық сақталған деректерді жоюға болады («Дербес деректер туралы» ҚР заңы бойынша сіздің құқығыңыз).</string>
     <string name="settings_delete_account">Есептік жазбаны жою</string>
@@ -203,6 +213,7 @@
     <!-- Common actions -->
     <string name="action_save">Сақтау</string>
     <string name="action_cancel">Болдырмау</string>
+    <string name="action_dismiss">Жасыру</string>
     <string name="action_delete">Жою</string>
 
     <!-- Hold-to-arm SOS -->
@@ -229,6 +240,8 @@
     <string name="notification_channel_alerts_desc">Аймағыңыздағы жаңа оқиғалар туралы хабарландырулар</string>
     <string name="notification_channel_checkin_name">Қауіпсіздік белгісі</string>
     <string name="notification_channel_checkin_desc">Қауіпсіздік белгісін еске салу</string>
+    <string name="notification_channel_area_alerts_name">Аймақтық қауіпсіздік хабарландырулары</string>
+    <string name="notification_channel_area_alerts_desc">Диспетчер жіберген аймағыңызға арналған ескертулер (су тасқыны, адам іздеу, қауіптер)</string>
     <string name="notification_channel_fake_call_name">Жалған қоңырау</string>
     <string name="notification_channel_fake_call_desc">Жоспарланған жалған кіріс қоңырау</string>
 </resources>

@@ -15,7 +15,14 @@ data class IncidentPrivateDetails(
     var medicalSnapshot: MedicalProfile? = null,
     var contactsSnapshot: List<EmergencyContact> = emptyList(),
     var dispatcherNote: String = "",
+    /**
+     * Peak impact g-force at the moment [kz.qlms.app.util.CrashHeuristic] detected a crash —
+     * eCall-style telemetry the dispatcher can act on immediately ("this was a hard hit") rather
+     * than an unqualified "possible crash detected". Null for every non-crash-triggered incident.
+     */
+    var impactForceG: Double? = null,
 ) {
     val isEmpty: Boolean
-        get() = (medicalSnapshot == null || medicalSnapshot?.isEmpty == true) && contactsSnapshot.isEmpty() && dispatcherNote.isBlank()
+        get() = (medicalSnapshot == null || medicalSnapshot?.isEmpty == true) &&
+            contactsSnapshot.isEmpty() && dispatcherNote.isBlank() && impactForceG == null
 }

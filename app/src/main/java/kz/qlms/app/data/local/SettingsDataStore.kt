@@ -33,6 +33,9 @@ class SettingsDataStore(private val context: Context) {
         val SOS_TRIGGER_MODE = stringPreferencesKey("sos_trigger_mode")
         val CRASH_DETECTION = booleanPreferencesKey("crash_detection_enabled")
         val PANIC_SIREN = booleanPreferencesKey("panic_siren_enabled")
+        val AML_SMS_ENABLED = booleanPreferencesKey("aml_sms_enabled")
+        val AML_SMS_GATEWAY_NUMBER = stringPreferencesKey("aml_sms_gateway_number")
+        val TEXT_ONLY_SOS_DEFAULT = booleanPreferencesKey("text_only_sos_default")
     }
 
     val lastCheckInFlow: Flow<Long> = context.dataStore.data.map { it[Keys.LAST_CHECK_IN] ?: System.currentTimeMillis() }
@@ -69,7 +72,21 @@ class SettingsDataStore(private val context: Context) {
             sosTriggerMode = prefs[Keys.SOS_TRIGGER_MODE]?.let { runCatching { SosTriggerMode.valueOf(it) }.getOrNull() } ?: SosTriggerMode.TAP_CONFIRM,
             crashDetectionEnabled = prefs[Keys.CRASH_DETECTION] ?: false,
             panicSirenEnabled = prefs[Keys.PANIC_SIREN] ?: true,
+            amlSmsEnabled = prefs[Keys.AML_SMS_ENABLED] ?: false,
+            amlSmsGatewayNumber = prefs[Keys.AML_SMS_GATEWAY_NUMBER] ?: "",
+            textOnlySosDefault = prefs[Keys.TEXT_ONLY_SOS_DEFAULT] ?: false,
         )
+    }
+
+    suspend fun setAmlSms(enabled: Boolean, gatewayNumber: String) {
+        context.dataStore.edit {
+            it[Keys.AML_SMS_ENABLED] = enabled
+            it[Keys.AML_SMS_GATEWAY_NUMBER] = gatewayNumber
+        }
+    }
+
+    suspend fun setTextOnlySosDefault(enabled: Boolean) {
+        context.dataStore.edit { it[Keys.TEXT_ONLY_SOS_DEFAULT] = enabled }
     }
 
     suspend fun setSosTriggerMode(mode: SosTriggerMode) {

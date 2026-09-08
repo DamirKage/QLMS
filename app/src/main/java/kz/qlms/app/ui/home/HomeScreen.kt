@@ -18,7 +18,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CloudOff
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -64,6 +66,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 import kz.qlms.app.R
 import kz.qlms.app.core.rememberAppContainer
+import kz.qlms.app.data.model.AlertSeverity
 import kz.qlms.app.data.model.AppSettings
 import kz.qlms.app.data.model.IncidentType
 import kz.qlms.app.data.model.SosTriggerMode
@@ -95,7 +98,12 @@ fun HomeScreen(
     val viewModel: HomeViewModel = viewModel(
         factory = viewModelFactory {
             initializer {
-                HomeViewModel(container.incidentRepository, container.authRepository, container.settingsDataStore.settingsFlow)
+                HomeViewModel(
+                    container.incidentRepository,
+                    container.authRepository,
+                    container.alertRepository,
+                    container.settingsDataStore.settingsFlow,
+                )
             }
         },
     )
@@ -115,26 +123,30 @@ fun HomeScreen(
     val userLocation by viewModel.userLocation.collectAsState()
     val nearbyIncidents by viewModel.nearbyIncidents.collectAsState()
     val pendingCount by viewModel.pendingCount.collectAsState()
+    val relevantAlerts by viewModel.relevantAlerts.collectAsState()
     val sosActive by SosForegroundService.isActive.collectAsState()
 
     var showTypePicker by remember { mutableStateOf(false) }
     var pendingType by remember { mutableStateOf<IncidentType?>(null) }
     var showPinCancel by remember { mutableStateOf(false) }
+    var dismissedAlertIds by remember { mutableStateOf(emptySet<String>()) }
     val snackbarHostState = remember { SnackbarHostState() }
     val fakeCallDefaultName = stringResource(R.string.fake_call_default_name)
     val settings by container.settingsDataStore.settingsFlow.collectAsState(initial = AppSettings())
 
-    fun fireSos(type: IncidentType) {
+    fun fireSos(type: IncidentType, textOnly: Boolean = false) {
         scope.launch {
             if (!sosPermissions.allPermissionsGranted) sosPermissions.launchMultiplePermissionRequest()
-            SosForegroundService.start(context, type)
+            SosForegroundService.start(context, type, isTextOnly = textOnly)
             if (settings.panicSirenEnabled) SirenController.start(context)
-            val hasCallPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) ==
-                android.content.pm.PackageManager.PERMISSION_GRANTED
-            if (hasCallPermission) {
-                PhoneUtils.callEmergencyNumber(context, type.referenceNumber.ifBlank { "112" })
-            } else {
-                PhoneUtils.dialEmergencyNumber(context, type.referenceNumber.ifBlank { "112" })
+            if (PhoneUtils.shouldPlaceEmergencyCall(textOnly)) {
+                val hasCallPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) ==
+                    android.content.pm.PackageManager.PERMISSION_GRANTED
+                if (hasCallPermission) {
+                    PhoneUtils.callEmergencyNumber(context, type.referenceNumber.ifBlank { "112" })
+                } else {
+                    PhoneUtils.dialEmergencyNumber(context, type.referenceNumber.ifBlank { "112" })
+                }
             }
         }
     }
@@ -174,6 +186,15 @@ fun HomeScreen(
         }
 
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+            relevantAlerts.filter { it.id !in dismissedAlertIds }.forEach { alert ->
+                AlertBanner(
+                    severity = alert.severity,
+                    title = alert.title,
+                    body = alert.body,
+                    onDismiss = { dismissedAlertIds = dismissedAlertIds + alert.id },
+                )
+                Spacer(Modifier.height(8.dp))
+            }
             if (pendingCount > 0) {
                 StatusBanner(
                     icon = Icons.Filled.CloudOff,
@@ -291,10 +312,11 @@ fun HomeScreen(
     pendingType?.let { type ->
         SosConfirmSheet(
             incidentType = type,
+            textOnlyDefault = settings.textOnlySosDefault,
             onDismiss = { pendingType = null },
-            onConfirmed = {
+            onConfirmed = { textOnly ->
                 pendingType = null
-                fireSos(type)
+                fireSos(type, textOnly)
             },
         )
     }
@@ -305,9 +327,47 @@ fun HomeScreen(
             onCorrectPin = { showPinCancel = false },
             onCountdownExpired = {
                 showPinCancel = false
-                fireSos(IncidentType.OTHER)
+                fireSos(IncidentType.OTHER, textOnly = settings.textOnlySosDefault)
             },
         )
+    }
+}
+
+@Composable
+private fun AlertBanner(
+    severity: AlertSeverity,
+    title: String,
+    body: String,
+    onDismiss: () -> Unit,
+) {
+    val (color, contentColor) = when (severity) {
+        AlertSeverity.CRITICAL -> QlmsSosColors.ActionRed to Color.White
+        AlertSeverity.WARNING -> MaterialTheme.colorScheme.tertiaryContainer to MaterialTheme.colorScheme.onTertiaryContainer
+        AlertSeverity.INFO -> MaterialTheme.colorScheme.secondaryContainer to MaterialTheme.colorScheme.onSecondaryContainer
+    }
+    Surface(color = color, contentColor = contentColor, shape = RoundedCornerShape(12.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                if (severity == AlertSeverity.INFO) Icons.Filled.Info else Icons.Filled.Warning,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
+            )
+            Spacer(Modifier.width(8.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                if (body.isNotBlank()) {
+                    Text(body, style = MaterialTheme.typography.bodySmall)
+                }
+            }
+            Icon(
+                Icons.Filled.Close,
+                contentDescription = stringResource(R.string.action_dismiss),
+                modifier = Modifier.size(18.dp).clickable(onClick = onDismiss),
+            )
+        }
     }
 }
 

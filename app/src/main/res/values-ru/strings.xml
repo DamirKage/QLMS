@@ -52,6 +52,8 @@
     <string name="sos_confirm_title">Вызов помощи</string>
     <string name="sos_confirm_body">Будет отправлено сообщение «%1$s», а также ваше местоположение — экстренным службам.</string>
     <string name="sos_confirm_cancel">Отменить</string>
+    <string name="sos_confirm_text_only_label">Только текст (без автоматического звонка)</string>
+    <string name="sos_confirm_text_only_desc">Используйте, если небезопасно говорить — диспетчер всё равно получит ваше местоположение и сможет связаться только через чат.</string>
     <string name="sos_notification_title">SOS активен</string>
     <string name="sos_notification_locating">Определяем ваше местоположение…</string>
     <string name="sos_notification_no_location">Место не определено, но сигнал отправляется</string>
@@ -59,6 +61,7 @@
     <string name="sos_notification_queued">Нет сети — будет отправлено при подключении</string>
     <string name="sos_notification_cancel_action">Отменить</string>
     <string name="sos_sms_template">ЧРЕЗВЫЧАЙНАЯ СИТУАЦИЯ! Мне нужна помощь. Моё местоположение: %1$s</string>
+    <string name="aml_sms_template">Экстренное оповещение QLMS — точное местоположение: %1$s (отправлено автоматически, ответ не требуется)</string>
     <string name="sos_sms_tracking_suffix">Следите за статусом здесь: %1$s</string>
 
     <string name="report_title">Сообщить о происшествии</string>
@@ -181,6 +184,13 @@
     <string name="settings_set_pin_body">Для режима удержания нужен PIN, чтобы вы могли отменить ложную тревогу за %1$d секунд. Выберите 4–6 цифр.</string>
     <string name="settings_pin_label">PIN-код безопасности</string>
     <string name="settings_pin_save_action">Сохранить и включить</string>
+    <string name="settings_text_only_default">SOS без звонка по умолчанию (удержание/встряхивание/ДТП)</string>
+    <string name="settings_text_only_default_desc">Используется, когда нет экрана подтверждения — диспетчер всё равно получит местоположение, но не будет перезванивать</string>
+    <string name="settings_section_aml">Автоматическая SMS с местоположением</string>
+    <string name="settings_aml_explanation">Повторяет то, что делает Advanced Mobile Location на европейских телефонах: в момент активации SOS точные GPS-координаты отправляются SMS на выбранный номер — в дополнение к звонку на 112, а не вместо него.</string>
+    <string name="settings_aml_enable">Отправлять автоматическую SMS с местоположением при SOS</string>
+    <string name="settings_aml_number_label">Номер шлюза</string>
+    <string name="settings_aml_number_hint">Номер, способный принимать SMS — уточните в местной службе 112, принимают ли они такие сообщения</string>
     <string name="settings_section_privacy">Конфиденциальность</string>
     <string name="settings_privacy_note">Вы можете удалить аккаунт и все сохранённые данные (ваше право по Закону РК «О персональных данных»).</string>
     <string name="settings_delete_account">Удалить аккаунт</string>
@@ -189,6 +199,7 @@
 
     <string name="action_save">Сохранить</string>
     <string name="action_cancel">Отмена</string>
+    <string name="action_dismiss">Скрыть</string>
     <string name="action_delete">Удалить</string>
 
     <string name="hold_sos_label">УДЕРЖИВАЙТЕ</string>
@@ -212,6 +223,8 @@
     <string name="notification_channel_alerts_desc">Уведомления о новых происшествиях в вашем районе</string>
     <string name="notification_channel_checkin_name">Проверка безопасности</string>
     <string name="notification_channel_checkin_desc">Напоминания о проверке безопасности</string>
+    <string name="notification_channel_area_alerts_name">Оповещения о безопасности в районе</string>
+    <string name="notification_channel_area_alerts_desc">Предупреждения от диспетчера для вашего района (наводнения, розыск людей, опасности)</string>
     <string name="notification_channel_fake_call_name">Фальшивый звонок</string>
     <string name="notification_channel_fake_call_desc">Запланированный фальшивый входящий звонок</string>
 </resources>

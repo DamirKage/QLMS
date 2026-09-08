@@ -176,6 +176,25 @@ button.primary:disabled { opacity: 0.6; cursor: not-allowed; }
 .badge.ACKNOWLEDGED, .badge.DISPATCHED { background: var(--qlms-amber-soft); color: var(--qlms-amber); }
 .badge.RESOLVED { background: var(--qlms-green-soft); color: var(--qlms-green); }
 .badge.FALSE_ALARM, .badge.CANCELLED { background: #eceef3; color: var(--qlms-text-muted); }
+.text-only-warning {
+  margin-top: 10px; padding: 10px 12px; border-radius: 8px;
+  background: var(--qlms-amber-soft); color: var(--qlms-amber);
+  font-size: 12.5px; font-weight: 600; line-height: 1.5;
+}
+
+.alert-overlay {
+  position: fixed; inset: 0; background: rgba(10, 14, 25, .45);
+  display: flex; align-items: center; justify-content: center; z-index: 50;
+}
+.alert-modal {
+  background: #fff; border-radius: 14px; padding: 24px; width: 100%; max-width: 420px;
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, .4);
+}
+.alert-modal h3 { margin: 0 0 8px; }
+.alert-modal-hint { margin: 0 0 16px; font-size: 12.5px; color: var(--qlms-text-muted); line-height: 1.5; }
+.alert-modal label { display: block; font-size: 12px; font-weight: 700; color: var(--qlms-text-muted); margin: 12px 0 4px; }
+.alert-modal input[type="range"] { width: 100%; }
+.alert-radius-value { font-size: 12px; color: var(--qlms-text-muted); margin-top: 4px; }
 
 #map { width: 100%; height: 100%; }
 

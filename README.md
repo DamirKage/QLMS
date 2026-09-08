@@ -43,7 +43,20 @@ comparison changed in this build.
   "confirmed by the community" badge, in both the app and the dispatcher panel.
 - **Automatic crash/fall detection** — an opt-in heuristic (hard impact
   followed by stillness) that triggers SOS on its own, without continuous
-  background location tracking.
+  background location tracking; the peak impact g-force is passed straight
+  to the dispatcher, eCall-style.
+- **Automatic location SMS (AML-style)** — on SOS, in addition to the 112
+  call, optionally text a precise GPS fix straight to a number of your
+  choosing, reproducing at the app level what Advanced Mobile Location does
+  at the carrier level on European phones.
+- **Text-only SOS** — a text-to-911 equivalent: skip the automatic call when
+  it isn't safe to talk (or, for shake/crash triggers, when there was never
+  a call to place) — dispatch still gets your location and a clear "don't
+  call back" flag, and can only be reached by chat.
+- **Area safety alerts** — a reverse-112/Wireless-Emergency-Alerts idea:
+  dispatchers can broadcast a warning (flood, missing person, hazard) to
+  everyone nearby, reusing the same geohash-topic push infrastructure as
+  "incident near you" notifications.
 - **Incident reporting** — crime, fire, medical, road accident, domestic
   violence, missing person, natural disaster, gas leak, or other — with a
   description, address, and photos, anonymously if you choose.

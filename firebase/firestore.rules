@@ -35,6 +35,12 @@ rules_version = '2';
 //                                          getPublicTripStatus Cloud Function
 //                                          (admin SDK, one doc at a time),
 //                                          never through a client rule here.
+//   alerts/{id}                        -> reverse-112/WEA-style area broadcast,
+//                                          created only by dispatcher/admin
+//                                          accounts, readable by any signed-in
+//                                          user (it's public safety information,
+//                                          not sensitive), never editable —
+//                                          a correction ships as a new alert.
 //
 // Medical info and emergency contacts are split into a private subdocument
 // on purpose: Firestore rules can only grant or deny a whole document, never
@@ -120,6 +126,12 @@ service cloud.firestore {
       allow read, update: if isOwner(resource.data.userId);
       allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
       allow delete: if false;
+    }
+
+    match /alerts/{alertId} {
+      allow read: if isSignedIn();
+      allow create: if isDispatcher() && request.resource.data.createdBy == request.auth.uid;
+      allow update, delete: if false;
     }
   }
 }

@@ -150,7 +150,7 @@ function renderList() {
     <div class="incident-item ${incident.isSosTriggered ? "sos" : ""} ${incident.id === selectedId ? "selected" : ""}" data-id="${incident.id}">
       <div class="icon">${TYPE_ICONS[incident.type] ?? "❓"}</div>
       <div>
-        <div class="title">${escapeHtml(TYPE_LABELS[incident.type] ?? incident.type)} ${incident.isSosTriggered ? "· SOS" : ""} ${isCommunityVerified(incident) ? "✓" : ""}</div>
+        <div class="title">${escapeHtml(TYPE_LABELS[incident.type] ?? incident.type)} ${incident.isSosTriggered ? "· SOS" : ""} ${incident.isTextOnly ? "· ЖАЗБАША" : ""} ${isCommunityVerified(incident) ? "✓" : ""}</div>
         <div class="meta">${escapeHtml(incident.address || formatCoords(incident))}</div>
         <div class="meta">${formatTime(incident.createdAt)}</div>
         <span class="badge ${incident.status}">${STATUS_LABELS[incident.status] ?? incident.status}</span>
@@ -224,6 +224,11 @@ function renderDetail(incident) {
   panel.innerHTML = `
     <h2>${escapeHtml(TYPE_LABELS[incident.type] ?? incident.type)}</h2>
     <span class="badge ${incident.status}">${STATUS_LABELS[incident.status] ?? incident.status}</span>
+    ${incident.isTextOnly ? `
+      <div class="text-only-warning">
+        ТЕК ЖАЗБАША — қоңырау шалмаңыз. Хабарлаушы дауыстық қоңырауды растай алмады немесе автоматты түрде жіберілді (шайқау/соққы сенсоры). Тек чат арқылы байланысыңыз.
+      </div>
+    ` : ""}
 
     <div class="section">
       <h3>Қауымдастық растауы</h3>
@@ -289,6 +294,9 @@ function renderPrivateSection(data, denied = false) {
   if (noteInput && data.dispatcherNote) noteInput.value = data.dispatcherNote;
 
   section.innerHTML = `
+    ${typeof data.impactForceG === "number" ? `
+      <div class="detail-row" style="margin-bottom:10px"><span class="k">Анықталған соққы күші:</span> <b>${data.impactForceG.toFixed(1)}g</b> (автоматты түрде анықталды)</div>
+    ` : ""}
     <h3>Медициналық ақпарат</h3>
     ${medical ? `
       <div class="detail-row"><span class="k">Қан тобы:</span> ${escapeHtml(medical.bloodType || "—")}</div>
@@ -308,6 +316,72 @@ function renderPrivateSection(data, denied = false) {
 async function updateStatus(incidentId, status) {
   await updateDoc(doc(db, "incidents", incidentId), { status, updatedAt: serverTimestamp() });
 }
+
+// ---------- Area safety alerts (reverse-112 / Wireless-Emergency-Alerts idea) ----------
+// Publishing a doc here triggers onAlertCreated (functions/index.js), which fans the push
+// out to every geohash-area topic covering (center, radius) — the same topics
+// NotificationTopics.kt already subscribes citizen devices to for "incident near you".
+let alertCenter = { lat: map.getCenter().lat, lng: map.getCenter().lng };
+let alertRadiusCircle = null;
+
+function updateAlertCenterLabel() {
+  document.getElementById("alertCenterValue").textContent = `${alertCenter.lat.toFixed(4)}, ${alertCenter.lng.toFixed(4)}`;
+}
+
+function updateAlertRadiusCircle() {
+  const radiusKm = Number(document.getElementById("alertRadiusInput").value);
+  document.getElementById("alertRadiusValue").textContent = radiusKm;
+  if (alertRadiusCircle) map.removeLayer(alertRadiusCircle);
+  alertRadiusCircle = L.circle([alertCenter.lat, alertCenter.lng], {
+    radius: radiusKm * 1000, color: "#b25e00", fillColor: "#b25e00", fillOpacity: 0.12, weight: 1.5,
+  }).addTo(map);
+}
+
+function openAlertOverlay() {
+  alertCenter = { lat: map.getCenter().lat, lng: map.getCenter().lng };
+  updateAlertCenterLabel();
+  updateAlertRadiusCircle();
+  document.getElementById("alertOverlay").hidden = false;
+  map.on("click", onMapClickForAlert);
+}
+
+function closeAlertOverlay() {
+  document.getElementById("alertOverlay").hidden = true;
+  map.off("click", onMapClickForAlert);
+  if (alertRadiusCircle) { map.removeLayer(alertRadiusCircle); alertRadiusCircle = null; }
+}
+
+function onMapClickForAlert(e) {
+  alertCenter = { lat: e.latlng.lat, lng: e.latlng.lng };
+  updateAlertCenterLabel();
+  updateAlertRadiusCircle();
+}
+
+document.getElementById("sendAlertBtn").addEventListener("click", openAlertOverlay);
+document.getElementById("alertCancelBtn").addEventListener("click", closeAlertOverlay);
+document.getElementById("alertRadiusInput").addEventListener("input", updateAlertRadiusCircle);
+
+document.getElementById("alertPublishBtn").addEventListener("click", async () => {
+  const title = document.getElementById("alertTitleInput").value.trim();
+  const body = document.getElementById("alertBodyInput").value.trim();
+  if (!title) {
+    alert("Тақырыпты енгізіңіз.");
+    return;
+  }
+  await addDoc(collection(db, "alerts"), {
+    title,
+    body,
+    latitude: alertCenter.lat,
+    longitude: alertCenter.lng,
+    radiusKm: Number(document.getElementById("alertRadiusInput").value),
+    severityName: document.getElementById("alertSeveritySelect").value,
+    createdBy: currentUser.uid,
+    createdAt: serverTimestamp(),
+  });
+  document.getElementById("alertTitleInput").value = "";
+  document.getElementById("alertBodyInput").value = "";
+  closeAlertOverlay();
+});
 
 async function saveNote(incidentId) {
   const note = document.getElementById("noteInput").value;

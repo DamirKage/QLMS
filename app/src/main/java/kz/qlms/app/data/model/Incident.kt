@@ -32,6 +32,14 @@ data class Incident(
     @get:PropertyName("status") @set:PropertyName("status")
     var statusName: String = IncidentStatus.NEW.name,
     var hasPrivateDetails: Boolean = false,
+    /**
+     * Text-to-911 equivalent: the reporter chose not to (or a trigger path
+     * like shake/crash never could) place the 112 call. This lives on the
+     * PUBLIC doc, not the private subdoc — a dispatcher must see it the
+     * instant the incident loads, before opening any detail, because calling
+     * this person back could put them in more danger, not less.
+     */
+    var isTextOnly: Boolean = false,
     /** Community verification tally — see [IncidentVerification]. Anyone signed in may confirm/dispute; never the reporter's own report. */
     var confirmCount: Int = 0,
     var disputeCount: Int = 0,

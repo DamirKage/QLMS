@@ -31,10 +31,11 @@ users/{uid}                         profile (name, email, role, language)
 users/{uid}/contacts/{contactId}    emergency contacts
 incidents/{id}                      PUBLIC: type, status, description,
                                      address, lat/lon, geohash, photos,
-                                     isSosTriggered, reporterId, timestamps,
-                                     confirmCount, disputeCount
+                                     isSosTriggered, isTextOnly, reporterId,
+                                     timestamps, confirmCount, disputeCount
 incidents/{id}/private/dispatch     PRIVATE: medicalSnapshot,
-                                     contactsSnapshot, dispatcherNote
+                                     contactsSnapshot, dispatcherNote,
+                                     impactForceG (crash-detected incidents)
 incidents/{id}/messages/{msgId}     live reporter <-> dispatcher chat
 incidents/{id}/verifications/{uid}  one community confirm/dispute vote
                                      per uid — see "Community verification"
@@ -42,6 +43,10 @@ trips/{id}                          "walk me home": destination, status,
                                      live lat/lon, expected arrival, contacts
                                      snapshot — owner-only, never part of
                                      the incidents feed (see below)
+alerts/{id}                         reverse-112/WEA-style area broadcast:
+                                     title, body, lat/lon, radiusKm,
+                                     severity, createdBy — dispatcher-only
+                                     write, any signed-in user may read
 ```
 
 ### Why the private subdocument exists
@@ -69,6 +74,49 @@ way as the incident tracking link — a narrow Cloud Function
 (`getPublicTripStatus`) reading one document at a time, never direct
 Firestore access — so sharing a trip link can't be turned into browsing
 anyone else's trips.
+
+### Where the 112/911-comparison features live
+
+Four features came directly out of comparing QLMS to how the US 911 system
+(NG911, RapidSOS, Advanced Mobile Location) and Kazakhstan's own 112 evolved
+— see the chat history / `docs/MARKET_RESEARCH.md` for the full comparison:
+
+- **AML-style automatic location SMS** (`PhoneUtils.amlGatewayNumberOrNull` /
+  `buildAmlLocationSms`, wired in `SosForegroundService`). Real AML runs at
+  the carrier/OS level — every Android and iOS phone already broadcasts a
+  precise GPS fix by SMS/HTTPS the instant an emergency number is dialed, a
+  protocol Kazakhstan's 112 centers likely aren't parsing yet. An app can't
+  reach into carrier call handling to add that, so this reproduces the same
+  *outcome* one layer up: on SOS, text a precise fix straight to a
+  configured gateway number, in addition to (never instead of) the 112 call.
+  Off by default, and a no-op unless both the toggle and a real number are
+  set (`amlGatewayNumberOrNull` guards exactly that).
+- **Text-only SOS** (`Incident.isTextOnly`, `PhoneUtils.shouldPlaceEmergencyCall`).
+  The text-to-911 idea: some people can't safely take a call back. It's a
+  PUBLIC field, not a private one — a dispatcher must see it before opening
+  any detail, because calling this person back could put them in more danger,
+  not less. Shake and crash triggers are always `isTextOnly = true`, since
+  neither path ever had a UI to place a call through in the first place —
+  this also documents behavior that was already true before this field
+  existed, just invisible to the dispatcher.
+- **Crash impact telemetry** (`IncidentPrivateDetails.impactForceG`,
+  `CrashHeuristic.CrashEvent`). eCall's idea, one layer up from carrier
+  integration: report the peak g-force at the moment of impact so the
+  dispatcher sees "this was a 4.8g hit," not an unqualified "possible crash."
+- **Area safety alerts** (`alerts/{id}`, `functions/index.js`'s
+  `onAlertCreated`, `AlertRepository`). The reverse-112/Wireless-Emergency-Alerts
+  idea: dispatchers push a warning to everyone nearby instead of waiting for
+  citizens to call in. Fan-out reuses the exact geohash-topic scheme
+  `NotificationTopics.kt` already subscribes clients to for "incident near
+  you" pushes, rather than inventing a second mechanism. This is a
+  deliberately bounded MVP: topics are ~20km square cells, not a true
+  geodesic circle, so `SafetyAlert.isRelevantTo()` does the precise circular
+  check client-side before an in-app banner shows. A real WEA broadcasts
+  over the cell network itself, reaching every phone in range whether or not
+  it has any particular app installed — an app-level broadcast can only ever
+  reach devices that already have QLMS installed and subscribed, which is
+  the one gap here that genuinely can't be closed without carrier-level
+  access.
 
 ### Why community verification is a subcollection vote, not a public field
 

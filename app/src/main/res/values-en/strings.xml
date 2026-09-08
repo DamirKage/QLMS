@@ -52,6 +52,8 @@
     <string name="sos_confirm_title">Calling for help</string>
     <string name="sos_confirm_body">A "%1$s" report will be sent along with your location to emergency services.</string>
     <string name="sos_confirm_cancel">Cancel</string>
+    <string name="sos_confirm_text_only_label">Text-only (no automatic call)</string>
+    <string name="sos_confirm_text_only_desc">Use if it isn\'t safe to talk — dispatch still gets your location and can only reach you by chat.</string>
     <string name="sos_notification_title">SOS active</string>
     <string name="sos_notification_locating">Finding your location…</string>
     <string name="sos_notification_no_location">Location unavailable, sending anyway</string>
@@ -60,6 +62,7 @@
     <string name="sos_notification_cancel_action">Cancel</string>
     <string name="sos_sms_template">EMERGENCY! I need help. My location: %1$s</string>
     <string name="sos_sms_tracking_suffix">Follow live status here: %1$s</string>
+    <string name="aml_sms_template">QLMS emergency alert — precise location: %1$s (sent automatically, no reply expected)</string>
 
     <string name="report_title">Report an incident</string>
     <string name="report_pick_type">Incident type</string>
@@ -181,6 +184,13 @@
     <string name="settings_set_pin_body">Hold-to-arm needs a PIN so you can cancel a false alarm within %1$d seconds. Choose 4–6 digits.</string>
     <string name="settings_pin_label">Safety PIN</string>
     <string name="settings_pin_save_action">Save and enable</string>
+    <string name="settings_text_only_default">Default hold-to-arm/shake/crash SOS to text-only</string>
+    <string name="settings_text_only_default_desc">Used when there\'s no confirm screen to ask in — dispatch still gets your location but won\'t call back</string>
+    <string name="settings_section_aml">Automatic location SMS</string>
+    <string name="settings_aml_explanation">Mirrors what Advanced Mobile Location does on European phones: the instant you trigger SOS, a precise GPS fix is texted straight to a number of your choosing — in addition to, not instead of, the 112 call.</string>
+    <string name="settings_aml_enable">Send an automatic location SMS on SOS</string>
+    <string name="settings_aml_number_label">Gateway number</string>
+    <string name="settings_aml_number_hint">A number that can receive SMS — check with your local 112 center whether they accept this</string>
     <string name="settings_section_privacy">Privacy</string>
     <string name="settings_privacy_note">You can delete your account and all stored data (your right under Kazakhstan\'s "On Personal Data" law).</string>
     <string name="settings_delete_account">Delete account</string>
@@ -189,6 +199,7 @@
 
     <string name="action_save">Save</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_dismiss">Dismiss</string>
     <string name="action_delete">Delete</string>
 
     <string name="hold_sos_label">HOLD</string>
@@ -212,6 +223,8 @@
     <string name="notification_channel_alerts_desc">Notifications about new incidents in your area</string>
     <string name="notification_channel_checkin_name">Safety check-in</string>
     <string name="notification_channel_checkin_desc">Safety check-in reminders</string>
+    <string name="notification_channel_area_alerts_name">Area safety alerts</string>
+    <string name="notification_channel_area_alerts_desc">Dispatcher-issued warnings for your area (floods, missing persons, hazards)</string>
     <string name="notification_channel_fake_call_name">Fake call</string>
     <string name="notification_channel_fake_call_desc">A scheduled fake incoming call</string>
 </resources>

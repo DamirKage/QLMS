@@ -26,6 +26,9 @@ object Constants {
     const val NOTIFICATION_CHANNEL_ALERTS = "qlms_alerts_channel"
     const val NOTIFICATION_CHANNEL_CHECKIN = "qlms_checkin_channel"
     const val NOTIFICATION_CHANNEL_FAKE_CALL = "qlms_fake_call_channel"
+    /** Separate from NOTIFICATION_CHANNEL_ALERTS so a user can mute routine "incident near you"
+     * pushes without also muting dispatcher-issued area safety warnings, or the reverse. */
+    const val NOTIFICATION_CHANNEL_AREA_ALERTS = "qlms_area_alerts_channel"
 
     const val FAKE_CALL_DEFAULT_DELAY_SECONDS = 8L
 

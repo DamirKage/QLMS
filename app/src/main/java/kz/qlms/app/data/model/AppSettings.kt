@@ -28,4 +28,11 @@ data class AppSettings(
     val sosTriggerMode: SosTriggerMode = SosTriggerMode.TAP_CONFIRM,
     val crashDetectionEnabled: Boolean = false,
     val panicSirenEnabled: Boolean = true,
+    /** AML-style automatic location SMS: on every SOS, in addition to the 112 call, immediately
+     * text a precise GPS fix to this number — mirrors what Advanced Mobile Location does at the
+     * carrier level, done at the app level since a citizen app can't touch carrier infrastructure. */
+    val amlSmsEnabled: Boolean = false,
+    val amlSmsGatewayNumber: String = "",
+    /** Default for hold-to-arm/shake/crash triggers, which have no per-incident confirm sheet to ask in. */
+    val textOnlySosDefault: Boolean = false,
 )

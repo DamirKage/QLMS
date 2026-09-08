@@ -14,6 +14,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kz.qlms.app.MainActivity
 import kz.qlms.app.QlmsApplication
@@ -42,15 +43,17 @@ class SosForegroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val typeName = intent?.getStringExtra(EXTRA_INCIDENT_TYPE) ?: IncidentType.OTHER.name
         val description = intent?.getStringExtra(EXTRA_DESCRIPTION).orEmpty()
+        val textOnly = intent?.getBooleanExtra(EXTRA_TEXT_ONLY, false) ?: false
+        val impactForceG = intent?.getDoubleExtra(EXTRA_IMPACT_FORCE_G, -1.0)?.takeIf { it >= 0 }
 
         startForeground(NOTIFICATION_ID, buildNotification(getString(R.string.sos_notification_locating)))
         _isActive.value = true
 
-        scope.launch { runSosFlow(typeName, description) }
+        scope.launch { runSosFlow(typeName, description, textOnly, impactForceG) }
         return START_STICKY
     }
 
-    private suspend fun runSosFlow(typeName: String, description: String) {
+    private suspend fun runSosFlow(typeName: String, description: String, textOnly: Boolean, impactForceG: Double?) {
         val app = applicationContext as QlmsApplication
         val repo = app.container.incidentRepository
         val userRepo = app.container.userRepository
@@ -71,13 +74,22 @@ class SosForegroundService : Service() {
             isSosTriggered = true,
             type = typeName,
             description = description,
+            isTextOnly = textOnly,
             latitude = location?.latitude ?: 0.0,
             longitude = location?.longitude ?: 0.0,
         )
         val privateDetails = IncidentPrivateDetails(
             medicalSnapshot = medical.takeUnless { it.isEmpty },
             contactsSnapshot = contacts,
+            impactForceG = impactForceG,
         )
+
+        val settings = app.container.settingsDataStore.settingsFlow.first()
+        val amlNumber = PhoneUtils.amlGatewayNumberOrNull(settings.amlSmsEnabled, settings.amlSmsGatewayNumber)
+        if (amlNumber != null && location != null) {
+            val amlMessage = PhoneUtils.buildAmlLocationSms(getString(R.string.aml_sms_template), location.latitude, location.longitude)
+            PhoneUtils.sendSms(amlNumber, amlMessage)
+        }
 
         var syncedIncidentId: String? = null
         when (val result = repo.createIncidentDirectOrQueue(incident, privateDetails)) {
@@ -162,6 +174,8 @@ class SosForegroundService : Service() {
     companion object {
         const val EXTRA_INCIDENT_TYPE = "extra_incident_type"
         const val EXTRA_DESCRIPTION = "extra_description"
+        const val EXTRA_TEXT_ONLY = "extra_text_only"
+        const val EXTRA_IMPACT_FORCE_G = "extra_impact_force_g"
         private const val NOTIFICATION_ID = 4201
 
         private val _isActive = MutableStateFlow(false)
@@ -170,10 +184,18 @@ class SosForegroundService : Service() {
         private val _currentIncidentId = MutableStateFlow<String?>(null)
         val currentIncidentId = _currentIncidentId.asStateFlow()
 
-        fun start(context: android.content.Context, type: IncidentType, description: String = "") {
+        fun start(
+            context: android.content.Context,
+            type: IncidentType,
+            description: String = "",
+            isTextOnly: Boolean = false,
+            impactForceG: Double? = null,
+        ) {
             val intent = Intent(context, SosForegroundService::class.java)
                 .putExtra(EXTRA_INCIDENT_TYPE, type.name)
                 .putExtra(EXTRA_DESCRIPTION, description)
+                .putExtra(EXTRA_TEXT_ONLY, isTextOnly)
+            if (impactForceG != null) intent.putExtra(EXTRA_IMPACT_FORCE_G, impactForceG)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(intent)
             } else {

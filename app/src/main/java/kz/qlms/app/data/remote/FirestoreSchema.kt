@@ -5,6 +5,7 @@ object FirestoreSchema {
     const val USERS = "users"
     const val INCIDENTS = "incidents"
     const val TRIPS = "trips"
+    const val ALERTS = "alerts"
 
     object UserFields {
         const val MEDICAL_PROFILE = "medicalProfile" // map field on the user doc

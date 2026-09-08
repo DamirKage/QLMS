@@ -150,3 +150,28 @@ this is required for the core SOS/report/dispatch flow to work.
    incident should appear on the map and in the list within a couple of
    seconds, with the medical/contacts panel visible only there and to the
    reporter.
+
+## 10. Unit tests
+
+`app/src/test/java/kz/qlms/app/` holds plain JUnit4 tests for the logic that
+doesn't need a device — `CrashHeuristicTest` (the impact+stillness state
+machine behind crash detection), `PhoneUtilsTest` (the AML-style location-SMS
+gating/formatting and the text-only dial-suppression decision),
+`SafetyAlertTest` (the client-side circular-radius check backing area
+alerts), and `IncidentPrivateDetailsTest`. Run them the normal way once you
+have Android Studio / a full SDK:
+
+```bash
+./gradlew test
+```
+
+These were written and verified in a sandbox with no Android SDK available
+(Google's Maven, where the SDK and Firebase Android libraries live, isn't
+reachable there) by compiling and running them with a standalone Kotlin
+compiler instead of Gradle — `CrashHeuristic.kt`, `GeoHash.kt`,
+`SafetyAlert.kt`, and `IncidentPrivateDetails.kt` ran completely unmodified;
+`PhoneUtilsTest` ran against a verbatim copy of just the three functions
+under test, since `PhoneUtils.kt`/`LocationUtils.kt` also declare
+Android-SDK-dependent methods (`SmsManager`, `FusedLocationProviderClient`)
+that a plain `kotlinc` can't resolve without that SDK. All 21 tests passed;
+`./gradlew test` should reproduce the same result against the real files.

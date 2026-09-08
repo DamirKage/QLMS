@@ -7,6 +7,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kz.qlms.app.data.local.AppDatabase
 import kz.qlms.app.data.local.SecurePrefsManager
 import kz.qlms.app.data.local.SettingsDataStore
+import kz.qlms.app.data.repository.AlertRepository
 import kz.qlms.app.data.repository.AuthRepository
 import kz.qlms.app.data.repository.IncidentRepository
 import kz.qlms.app.data.repository.TripRepository
@@ -35,4 +36,5 @@ class AppContainer(context: Context) {
         IncidentRepository(appContext, firestore, storage, database.pendingIncidentDao())
     }
     val tripRepository by lazy { TripRepository(firestore) }
+    val alertRepository by lazy { AlertRepository(firestore) }
 }

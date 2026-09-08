@@ -27,6 +27,19 @@
  *      is what lets someone holding the link see live progress without
  *      signing in and without being able to browse anyone else's trip.
  *
+ *   5. onAlertCreated — the reverse-112/Wireless-Emergency-Alerts idea: when
+ *      a dispatcher publishes an `alerts/{id}` doc, fans it out to every
+ *      geohash-area topic covering its (center, radius), reusing the exact
+ *      topic scheme NotificationTopics.kt already subscribes clients to for
+ *      "incident near you" pushes — no new subscription mechanism needed.
+ *      This is a deliberately bounded MVP: topics are ~20km square cells,
+ *      not a true geodesic circle, so a device can receive the push slightly
+ *      outside the alert's radius — SafetyAlert.isRelevantTo() on the client
+ *      does the precise circular check before showing an in-app banner. A
+ *      real carrier-level WEA broadcasts over the cell network itself; an
+ *      app can only ever reach devices that already have it installed and
+ *      subscribed, which is the real (unavoidable) limitation here.
+ *
  * Deploy with: firebase deploy --only functions   (after `firebase init functions`
  * in this folder and filling in a real Firebase project).
  */
@@ -122,4 +135,75 @@ exports.getPublicTripStatus = onRequest({ cors: true }, async (req, res) => {
     if (data[field] !== undefined) publicView[field] = data[field];
   }
   res.status(200).json(publicView);
+});
+
+// Same bit-interleaving geohash algorithm as GeoHash.kt on the client, ported
+// to JS so this function computes exactly the topic names clients actually
+// subscribe to — see NotificationTopics.kt (PREFIX_PRECISION = 4).
+const GEOHASH_BASE32 = "0123456789bcdefghjkmnpqrstuvwxyz";
+
+function encodeGeohash(latitude, longitude, precision) {
+  let latMin = -90, latMax = 90;
+  let lonMin = -180, lonMax = 180;
+  let hash = "";
+  let isEven = true;
+  let bit = 0;
+  let ch = 0;
+  while (hash.length < precision) {
+    if (isEven) {
+      const mid = (lonMin + lonMax) / 2;
+      if (longitude > mid) { ch |= (1 << (4 - bit)); lonMin = mid; } else { lonMax = mid; }
+    } else {
+      const mid = (latMin + latMax) / 2;
+      if (latitude > mid) { ch |= (1 << (4 - bit)); latMin = mid; } else { latMax = mid; }
+    }
+    isEven = !isEven;
+    if (bit < 4) {
+      bit++;
+    } else {
+      hash += GEOHASH_BASE32[ch];
+      bit = 0;
+      ch = 0;
+    }
+  }
+  return hash;
+}
+
+const ALERT_CELL_KM = 20; // matches NotificationTopics.kt's precision-4 (~20km) topic cells
+
+/** Every precision-4 topic cell that could hold a device within radiusKm of (latitude, longitude). */
+function areaTopicsForAlert(latitude, longitude, radiusKm) {
+  const steps = Math.max(1, Math.ceil(radiusKm / ALERT_CELL_KM));
+  const latStep = ALERT_CELL_KM / 111.0;
+  const lonStep = ALERT_CELL_KM / (111.0 * Math.max(0.2, Math.cos((latitude * Math.PI) / 180)));
+  const topics = new Set();
+  for (let dLat = -steps; dLat <= steps; dLat++) {
+    for (let dLon = -steps; dLon <= steps; dLon++) {
+      const lat = Math.min(90, Math.max(-90, latitude + dLat * latStep));
+      const lon = Math.min(180, Math.max(-180, longitude + dLon * lonStep));
+      topics.add(AREA_TOPIC_PREFIX + encodeGeohash(lat, lon, GEOHASH_TOPIC_PRECISION));
+    }
+  }
+  return Array.from(topics);
+}
+
+exports.onAlertCreated = onDocumentCreated("alerts/{alertId}", async (event) => {
+  const alert = event.data?.data();
+  if (!alert || alert.latitude === undefined || alert.longitude === undefined) return;
+
+  const topics = areaTopicsForAlert(alert.latitude, alert.longitude, alert.radiusKm || 5);
+  await Promise.all(
+    topics.map((topic) =>
+      getMessaging()
+        .send({
+          topic,
+          notification: { title: alert.title, body: alert.body },
+          data: { type: "area_alert", alertId: event.params.alertId },
+        })
+        // A topic with zero current subscribers still sends fine; only a
+        // malformed topic name would reject, so one bad cell shouldn't sink
+        // delivery to every other cell in the fan-out.
+        .catch((err) => console.error(`onAlertCreated: failed to send to ${topic}`, err)),
+    ),
+  );
 });

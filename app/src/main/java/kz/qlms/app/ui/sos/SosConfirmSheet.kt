@@ -5,9 +5,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -59,11 +62,13 @@ private const val CONFIRMED_ANIMATION_HOLD_MS = 550L
 @Composable
 fun SosConfirmSheet(
     incidentType: IncidentType,
+    textOnlyDefault: Boolean = false,
     onDismiss: () -> Unit,
-    onConfirmed: () -> Unit,
+    onConfirmed: (textOnly: Boolean) -> Unit,
 ) {
     var secondsLeft by remember { mutableIntStateOf(Constants.SOS_COUNTDOWN_SECONDS) }
     var confirmed by remember { mutableStateOf(false) }
+    var textOnly by remember { mutableStateOf(textOnlyDefault) }
     val scope = rememberCoroutineScope()
 
     DisposableEffect(Unit) {
@@ -74,7 +79,7 @@ fun SosConfirmSheet(
             }
             confirmed = true
             delay(CONFIRMED_ANIMATION_HOLD_MS)
-            onConfirmed()
+            onConfirmed(textOnly)
         }
         onDispose { job.cancel() }
     }
@@ -118,6 +123,24 @@ fun SosConfirmSheet(
                         strokeWidth = 6.dp,
                     )
                     Text(text = "$secondsLeft", style = MaterialTheme.typography.headlineMedium)
+                }
+            }
+
+            if (!confirmed) {
+                Spacer(Modifier.height(20.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth().clickable(onClick = { textOnly = !textOnly }),
+                ) {
+                    Checkbox(checked = textOnly, onCheckedChange = { textOnly = it })
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(stringResource(R.string.sos_confirm_text_only_label), style = MaterialTheme.typography.bodyMedium)
+                        Text(
+                            stringResource(R.string.sos_confirm_text_only_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
             }
 

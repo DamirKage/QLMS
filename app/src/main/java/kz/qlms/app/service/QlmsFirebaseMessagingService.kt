@@ -12,11 +12,14 @@ import kz.qlms.app.core.Constants
 
 /**
  * Receives: (a) "new incident near you" pushes fanned out server-side by geohash
- * topic (see functions/index.js for the reference Cloud Function), and
- * (b) status-change pushes when a dispatcher updates one of the user's own
- * reports. Token refresh is a no-op here — nothing server-side keys off a
- * per-device token in this design, only topic subscriptions (see
- * [NotificationTopics]), so there's nothing to persist.
+ * topic (see functions/index.js for the reference Cloud Function), (b)
+ * status-change pushes when a dispatcher updates one of the user's own
+ * reports, and (c) dispatcher-issued area safety alerts (data["type"] ==
+ * "area_alert" — see AlertRepository/onAlertCreated), shown on their own
+ * higher-importance channel since they're meant to be WEA-style attention
+ * grabbing rather than a routine heads-up. Token refresh is a no-op here —
+ * nothing server-side keys off a per-device token in this design, only topic
+ * subscriptions (see [NotificationTopics]), so there's nothing to persist.
  */
 class QlmsFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -24,6 +27,7 @@ class QlmsFirebaseMessagingService : FirebaseMessagingService() {
         val title = message.notification?.title ?: message.data["title"] ?: getString(R.string.app_name)
         val body = message.notification?.body ?: message.data["body"] ?: return
         val deepLinkIncidentId = message.data["incidentId"]
+        val isAreaAlert = message.data["type"] == "area_alert"
 
         val contentIntent = PendingIntent.getActivity(
             this,
@@ -34,13 +38,14 @@ class QlmsFirebaseMessagingService : FirebaseMessagingService() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
-        val notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ALERTS)
+        val channel = if (isAreaAlert) Constants.NOTIFICATION_CHANNEL_AREA_ALERTS else Constants.NOTIFICATION_CHANNEL_ALERTS
+        val notification = NotificationCompat.Builder(this, channel)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText(body)
             .setAutoCancel(true)
             .setContentIntent(contentIntent)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(if (isAreaAlert) NotificationCompat.PRIORITY_HIGH else NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
         NotificationManagerCompat.from(this).notify(System.currentTimeMillis().toInt(), notification)
